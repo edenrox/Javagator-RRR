@@ -1,0 +1,37 @@
+[
+    {"name": "The stage is set the green flag drops", "when": "race_start"},
+    {"name": "Let the carnage being", "when": "race_start"},
+    
+    {"name": "fades into last", "when": "position_change_last"},
+    {"name": "jams into first", "when": "position_change_first"},
+    {"name": "launches himself", "when": "high_jump"},
+    {"name": "lights him up", "when": "destroy"},
+    {"name": "Woah", "when": "fly_off"},
+    {"name": "Holy Toledo", "when": "fly_off"},
+    {"name": "Ouch", "when": "fly_off"}
+    {"name": "last lap", "when": "last_lap"},
+    {"name": "should avoid mines", "when": "destoryed_mine"},
+    {"name": "gets hammered", "when": "destroyed"},
+    {"name": "unleashes hot fury", "when": "fire_all_charges"},
+    
+    {"name": "is dominating the race", "status": "first"},
+    {"name": "looks lost out there", "status": "last"},
+    {"name": "is about to blow", "status": "low_armor"},
+    {"name": "is headed the wrong way", "status": "backwards"},
+    {"name": "powers up", "status": "finish_line"},
+    
+    {"name": "scores a first place knock out", "podium": "1"},
+    {"name": "finishes Second", "podium": "2"},
+    {"name": "takes a weak third", "podium": "3"},
+    {"name": "is in another time zone", "podium": "4"},
+    
+    
+    
+    
+    {"name": "Spin out", "when": "puddle"},
+    {"name": "Hits the warp", "when": "warp"},
+    {"name": "Wipe out", "when": "destroyed"},
+    
+    
+    
+]
