@@ -1,10 +1,10 @@
 [
-    {"name": "Black", "selectable": true, "colors": ["525152","292829","212021","101010"]},
-    {"name": "Blue", "selectable": true, "colors": ["9CCAFF","6B8ADE","2120A4","191873"]},
-    {"name": "Red", "selectable": true, "colors": ["DE395A","B50000","840000","5A0000"]},
-    {"name": "Green", "selectable": true, "colors": ["10AA10","008100","005900","002800"]},
-    {"name": "Yellow", "selectable": true, "colors": ["F7F37B","EEEB00","CEA200","AD6100"]},
-    {"name": "Purple", "selectable": false, "colors": ["841873","6B004A","4A0029","290010"]},
-    {"name": "Grey", "selectable": false, "colors": ["949A94","737173","4A514A","292829"]},
-    {"name": "Orange", "selectable": false, "colors": ["C58100","BD5100","843100","4A1800"]},
+    {"name": "Black", "selectable": true, "colors": ["787878","505050","282828","202020","101010"]},
+    {"name": "Blue", "selectable": true, "colors": ["98C8F8","6888D8","4050C0","2020A0","2020A0"]},
+    {"name": "Red", "selectable": true, "colors": ["F898C0","D83858","B00000","800000","580000"]},
+    {"name": "Green", "selectable": true, "colors": ["30C828","10A810","008000","005800","002800"]},
+    {"name": "Yellow", "selectable": true, "colors": ["F8F8F8","F0F078","E8E800","C8A000","A86000"]},
+    {"name": "Purple", "selectable": false, "colors": ["903898","801870","680048","480028", "480028"]},
+    {"name": "Grey", "selectable": false, "colors": ["B8B8B8","909890","707070","485048", "282828"]},
+    {"name": "Orange", "selectable": false, "colors": ["D0B800","C08000","B85000","803000", "481800"]},
 ]

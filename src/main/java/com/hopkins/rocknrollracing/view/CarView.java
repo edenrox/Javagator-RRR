@@ -40,7 +40,7 @@ public class CarView {
         0x424142, 0x292829, 0x101010
     };
     public static final int[] PAINT_COLORS = new int[] {
-        0x08008C, 0x42007B, 0x63005A, 0x6B0010
+        0x001084, 0x08008C, 0x42007B, 0x63005A, 0x6B0010
         };
     
     protected Application app;
