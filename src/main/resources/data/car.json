@@ -1,0 +1,7 @@
+[
+    {"name": "Dirt Devil", "price": 18000, "weapons": ["VK Plasma Rifle", "Locust Jump Jets", "BF's Slipsauce"]},
+    {"name": "Marauder", "price": 18000, "weapons": ["VK Plasma Rifle", "Locust Jump Jets", "BF's Slipsauce"]},
+    {"name": "Air Blade", "price": 70000, "weapons": ["Rogue Missile", "Lightning Nitro", "Bear Claw Mine"]},
+    {"name": "Battle Trak", "price": 110000, "weapons": ["Rogue Missile", "Lightning Nitro", "KO Scatterpack"]},
+    {"name": "Havoc", "price": 130000, "weapons": ["Sundog Beams", "Lightning Nitro", "Bear Claw Mine"]}
+]

@@ -1,0 +1,10 @@
+[
+    {"name": "VK Plasma Rifle", "cost": 11000, "charge": "1 Pulse Round", "type": "forward"},
+    {"name": "Rogue Missile", "cost": 20000, "charge": "1 1 Rogue Missle", "type": "forward"},
+    {"name": "Sundog Beams", "cost": 20000, "charge": "1 Sundog", "type": "forward"},
+    {"name": "Locust Jump Jets", "cost": 11000, "charge": "1 Gas Charge", "type": "jump"},
+    {"name": "Lightning Nitro", "cost": 24000, "charge": "1 Bottle", "type": "jump"},
+    {"name": "BF's Slipsauce", "cost": 11000, "charge": "1 Barrel", "type": "drop"},
+    {"name": "Bear Claw Mine", "cost": 20000, "charge": "1 Mine", "type": "drop"},
+    {"name": "KO Scatterpack", "cost": 24000, "charge": "1 Scatterpack", "type": "drop"}
+]

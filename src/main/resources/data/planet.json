@@ -1,0 +1,16 @@
+[
+    {"name": "Chem VI", "temperature": 94, "description": "Bring your gas mask to race on this smoggy, overcrowded world."},
+    {"name": "Drakonis", "temperature": 110, "description": "The locals here are very fond of humans ... for dinner."},
+    {"name": "Bogmire", "temperature": 80, "description": "The swampy domain of Ragewortt, self proclaimed ruler of everything."},
+    {"name": "New Mojave", "temperature": 115, "description": "Prison planet of the galaxy, victory will not come easy here."},
+    {"name": "Nho", "temperature": , "description": ""},
+    {"name": "Inferno", "temperature": , "description": ""},
+    
+    {"name": "Terra"},
+    {"name": "Serpentis"},
+    {"name": "Fleagull"},
+    {"name": "Panteros V"},
+    {"name": "Xeno Prime"},
+    {"name": "Aurora"},
+    {"name": "Valhalla"},
+]
