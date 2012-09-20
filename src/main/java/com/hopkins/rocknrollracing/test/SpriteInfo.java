@@ -17,7 +17,7 @@ public class SpriteInfo
     {
         
         Application app = new Application();
-        BufferedImage img = app.sprites.loadSprite("images/cars/battle_trak.png");
+        BufferedImage img = app.sprites.loadSprite("images/planet.png");
         
         log.info(String.format("Image Size: %dx%d pixels",
                     img.getWidth(), img.getHeight()));
@@ -30,6 +30,9 @@ public class SpriteInfo
             }
         }
         log.info(String.format("Palette: %d colours", tbl.length()) );
+        for(Integer item : tbl.getAllColors()) {
+            log.info(String.format("Color: #%06X", (item.intValue() & 0xFFFFFF)));
+        }
     }
     
     public static class ColorTable {
@@ -37,6 +40,10 @@ public class SpriteInfo
         
         public ColorTable() {
             data = new ArrayList<Integer>();
+        }
+        
+        public Iterable<Integer> getAllColors() {
+            return data;
         }
         
         public void addColor(int color) {
