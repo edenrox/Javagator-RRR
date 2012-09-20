@@ -19,7 +19,7 @@ public class Inflector {
     };
     
     public static String underscore(String phrase) {
-        return phrase.toLowerCase().replace(" ", "_");
+        return phrase.toLowerCase().replace(" ", "_").replace(".", "_");
     }
     public static String propercase(String phrase) {
         String[] words = phrase.replace("_", " ").split(" ");
