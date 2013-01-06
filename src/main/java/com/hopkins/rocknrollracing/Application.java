@@ -24,7 +24,7 @@ public class Application implements Runnable {
     public static final long MS_PER_SECOND = 1000;
     public static final long DESIRED_FPS = 60;
     public static final long DESIRED_PERIOD_MS = MS_PER_SECOND / DESIRED_FPS;
-    public static final String INITIAL_CONTROLLER = "AdvancePlanet";
+    public static final String INITIAL_CONTROLLER = "Intro";
     public static final String TITLE = "Javagator Rock 'n Roll Racing";
     
     
