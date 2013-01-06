@@ -1,5 +1,5 @@
 [
-    {"name": "Rookie"},
-    {"name": "Veteran"},
-    {"name": "Warrior"}
+    {"name": "Rookie", "planets": 4},
+    {"name": "Veteran", "planets": 5},
+    {"name": "Warrior", "planets": 6}
 ]

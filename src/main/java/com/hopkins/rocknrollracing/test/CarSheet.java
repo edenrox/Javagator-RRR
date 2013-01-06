@@ -4,15 +4,16 @@
  */
 package com.hopkins.rocknrollracing.test;
 
-import com.hopkins.rocknrollracing.Application;
-import com.hopkins.rocknrollracing.model.CarModelColor;
-import com.hopkins.rocknrollracing.view.CarView;
-import com.hopkins.rocknrollracing.view.TextView;
+import com.hopkins.rocknrollracing.state.CarColor;
+import com.hopkins.rocknrollracing.state.CarModel;
+import com.hopkins.rocknrollracing.state.CarState;
+import com.hopkins.rocknrollracing.views.elements.CarElement;
+import com.hopkins.rocknrollracing.views.elements.FontBasicElement;
+import com.hopkins.rocknrollracing.views.elements.FontIntroElement;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Set;
 import javax.imageio.ImageIO;
 
 /**
@@ -23,32 +24,42 @@ public class CarSheet {
     
     
     public static void main(String[] args) throws Exception {
-        Application app = new Application();
-        app.models.load();
         
-        CarView cv = new CarView(app);
-        CarModelColor cmc = app.models.carModelColors.get("Yellow");
         
-        TextView tv = new TextView(app);
-        Set<String> carNames = app.models.carModels.keys();
         
-        int width = CarView.SPRITE_WIDTH * CarView.ROTATION_ANGLES;
-        int height = (CarView.SPRITE_HEIGHT + TextView.SPRITE_HEIGHT) * carNames.size();
+        int width = CarElement.WIDTH * CarState.NUM_ANGLES;
+        int height = (CarElement.HEIGHT + FontIntroElement.HEIGHT) * CarModel.All.length;
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = img.createGraphics();
         g.setColor(Color.gray);
         g.fillRect(0, 0, width, height);
         
+        
+        // Initialize the views
+        CarElement carView = new CarElement();
+        carView.load();
+        FontIntroElement fontView = new FontIntroElement();
+        fontView.load();
+        
+        // We need a CarState
+        CarState cs = new CarState();
+        
         int x = 0, y = 0;
-        for(String carName : carNames) {
+        for(CarModel model : CarModel.All) {
             x = 0;
-            tv.drawText(g, x+2, y+1, carName);
-            y += TextView.SPRITE_HEIGHT;
-            for(int r = 0; r < CarView.ROTATION_ANGLES; r++) {
-                cv.draw(g, carName, x, y, r, 0, cmc);
-                x += CarView.SPRITE_WIDTH;
+            fontView.renderText(g, x+2, y+1, model.getName());
+            y += FontIntroElement.HEIGHT;
+            for(int r = 0; r < CarState.NUM_ANGLES; r++) {
+                cs.x = x;
+                cs.y = y;
+                cs.angle = r;
+                cs.model = model;
+                cs.color = CarColor.Blue;
+                
+                carView.render(g, cs);
+                x += CarElement.WIDTH;
             }
-            y += CarView.SPRITE_HEIGHT;
+            y += CarElement.HEIGHT;
         }
         
         ImageIO.write(img, "PNG", new File("cars.png"));

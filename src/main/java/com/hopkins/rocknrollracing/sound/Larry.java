@@ -10,7 +10,6 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
 
 /**
  *
