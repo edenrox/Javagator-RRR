@@ -5,3 +5,9 @@ target
 *.jar
 *.war
 *.ear
+
+# Mac Files #
+.DS_Store
+
+# Image Files #
+images
