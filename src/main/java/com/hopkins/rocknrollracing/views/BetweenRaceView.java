@@ -138,7 +138,7 @@ public class BetweenRaceView extends ViewWithBackground {
         
         
         CarState cs = new CarState();
-        cs.angle = (int)((ticks % 180 * 24) / 180);
+        cs.frame = (int)((ticks % 180 * 24) / 180);
         
         // Hero Side
         cs.color = gameState.Player1.Color;

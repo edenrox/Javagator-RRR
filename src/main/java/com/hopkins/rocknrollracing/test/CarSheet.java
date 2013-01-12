@@ -27,7 +27,7 @@ public class CarSheet {
         
         
         
-        int width = CarElement.WIDTH * CarState.NUM_ANGLES;
+        int width = CarElement.WIDTH * CarState.NUM_FRAMES;
         int height = (CarElement.HEIGHT + FontIntroElement.HEIGHT) * CarModel.All.length;
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = img.createGraphics();
@@ -49,10 +49,10 @@ public class CarSheet {
             x = 0;
             fontView.renderText(g, x+2, y+1, model.getName());
             y += FontIntroElement.HEIGHT;
-            for(int r = 0; r < CarState.NUM_ANGLES; r++) {
+            for(int r = 0; r < CarState.NUM_FRAMES; r++) {
                 cs.x = x;
                 cs.y = y;
-                cs.angle = r;
+                cs.frame = r;
                 cs.model = model;
                 cs.color = CarColor.Blue;
                 

@@ -90,15 +90,15 @@ public class CarElement extends AppElement {
         }
         
         for(int i = 0; i < TIRE_COLORS.length; i++) {
-            int tireColorIndex = (i + cs.frame) % TIRE_COLORS.length;
+            int tireColorIndex = (i + cs.wheelPosition) % TIRE_COLORS.length;
             palette[TIRE_COLOR_OFFSET + i] = TIRE_COLORS[tireColorIndex];
         }
     }
     
     protected void colorizeCar(CarState cs) {
-        int angleIndex = cs.angle;
+        int angleIndex = cs.frame;
         if (cs.isHFlip()) {
-            angleIndex = 24 - cs.angle;
+            angleIndex = 24 - cs.frame;
         }
         int carIndex = ArrayUtils.indexOfObject(CarModel.All, cs.model);
         cars[carIndex].render(palette, paletteBufferPixels, angleIndex * WIDTH * HEIGHT, WIDTH * HEIGHT);
@@ -149,7 +149,7 @@ public class CarElement extends AppElement {
                     int color = image.getRGB(x, y);
                     int colorIndex = ArrayUtils.indexOf(palette, color);
                     if (colorIndex == -1) {
-                        System.err.println(String.format("%x", color));
+                        //System.err.println(String.format("%x", color));
                         colorIndex = 0;
                     }
                     pixels[offset] = (byte) colorIndex;

@@ -7,7 +7,7 @@ package com.hopkins.rocknrollracing.views;
 import com.hopkins.rocknrollracing.inject.Inject;
 import com.hopkins.rocknrollracing.state.HasFace;
 import com.hopkins.rocknrollracing.state.PodiumPlace;
-import com.hopkins.rocknrollracing.state.RaceResult;
+import com.hopkins.rocknrollracing.state.race.RaceResult;
 import com.hopkins.rocknrollracing.utils.StringUtils;
 import com.hopkins.rocknrollracing.views.elements.*;
 import java.awt.Color;

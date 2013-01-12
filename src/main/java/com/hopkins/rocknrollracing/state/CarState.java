@@ -9,18 +9,22 @@ package com.hopkins.rocknrollracing.state;
  * @author ian
  */
 public class CarState  {
-    public static final int NUM_ANGLES = 24;
+    public static final int NUM_FRAMES = 24;
     
     public int x;
     public int y;
     public int z;
     public int trackZ;
-    public int angle;
+    public int frame;
     public CarColor color;
     public CarModel model;
-    public int frame;
+    public int wheelPosition;
     
     public boolean isHFlip() {
-        return angle > 12;
+        return frame > 12;
+    }
+    
+    public static int getFrameFromAngle(int angle) {
+        return (NUM_FRAMES + 18 - angle) % NUM_FRAMES;
     }
 }

@@ -45,23 +45,12 @@ public class BuyMenuElement extends AppElement {
         
         g.setColor(Color.BLACK);
         for (int i = 0; i < NUM_BUTTONS; i++) {
-            int sx1, sx2, sy1, sy2;
-            int dx1, dx2, dy1, dy2;
+            int mx = origin_x;
+            int my = getMenuY(origin_y, i);
+
+            g.fillRect(mx+1, my+1, w, h);
             
-            dx1 = origin_x;
-            dy1 = getMenuY(origin_y, i);
-            
-            dx2 = dx1 + w;
-            dy2 = dy1 + h;
-            
-            sx1 = 0;
-            sx2 = sx1 + w;
-            sy1 = h * i;
-            sy2 = sy1 + h;
-            
-            g.fillRect(dx1+1, dy1+1, w, h);
-            
-            g.drawImage(menuImage, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
+            SpriteRenderer.render(g, menuImage, x, y, w, h, i, false, false);
         }
         
         

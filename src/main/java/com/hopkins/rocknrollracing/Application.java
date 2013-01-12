@@ -5,6 +5,7 @@
 package com.hopkins.rocknrollracing;
 
 import com.hopkins.rocknrollracing.controllers.AppController;
+import com.hopkins.rocknrollracing.state.CarModel;
 import com.hopkins.rocknrollracing.state.ControllerState;
 import com.hopkins.rocknrollracing.state.GameState;
 import com.hopkins.rocknrollracing.views.Screen;
@@ -24,7 +25,7 @@ public class Application implements Runnable {
     public static final long MS_PER_SECOND = 1000;
     public static final long DESIRED_FPS = 60;
     public static final long DESIRED_PERIOD_MS = MS_PER_SECOND / DESIRED_FPS;
-    public static final String INITIAL_CONTROLLER = "Intro";
+    public static final String INITIAL_CONTROLLER = "Race";
     public static final String TITLE = "Javagator Rock 'n Roll Racing";
     
     
@@ -41,6 +42,7 @@ public class Application implements Runnable {
     
     public Application() {
         gameState = new GameState();
+        gameState.Player1.Model = CarModel.AirBlade;
         initBuffer();
         dispatch(INITIAL_CONTROLLER);
     }

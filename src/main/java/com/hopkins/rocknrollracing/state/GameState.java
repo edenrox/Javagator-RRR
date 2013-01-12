@@ -4,6 +4,8 @@
  */
 package com.hopkins.rocknrollracing.state;
 
+import com.hopkins.rocknrollracing.state.race.RaceResult;
+
 /**
  *
  * @author ian

@@ -4,6 +4,8 @@
  */
 package com.hopkins.rocknrollracing.state;
 
+import com.hopkins.rocknrollracing.utils.ArrayUtils;
+
 /**
  *
  * @author ian
@@ -32,5 +34,9 @@ public class CarColor extends NamedModel {
     public CarColor(String name, int color1, int color2, int color3, int color4, int color5) {
       super(name);
       this.colors = new int[] {color1, color2, color3, color4, color5};
+    }
+    
+    public int ordinal() {
+        return ArrayUtils.indexOfObject(All, this);
     }
 }

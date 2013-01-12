@@ -5,7 +5,7 @@
 package com.hopkins.rocknrollracing.controllers;
 
 import com.hopkins.rocknrollracing.state.ControllerState;
-import com.hopkins.rocknrollracing.state.RaceResult;
+import com.hopkins.rocknrollracing.state.race.RaceResult;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

@@ -116,9 +116,9 @@ public class BuyView extends ViewWithBackground {
         cs.y = 149;
         for (int i = 0; i < NUM_PLACES; i++) {
             if (i == modelIndex) {
-                cs.angle = (int)((ticks % 180 * 24) / 180);
+                cs.frame = (int)((ticks % 180 * 24) / 180);
             } else {
-                cs.angle = 21;
+                cs.frame = 21;
             }
             cs.x = 73 + i * 56;
             cs.model = getModel(i);

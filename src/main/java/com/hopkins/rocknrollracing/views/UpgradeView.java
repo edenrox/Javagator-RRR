@@ -11,6 +11,7 @@ import com.hopkins.rocknrollracing.state.Upgrade;
 import com.hopkins.rocknrollracing.state.UpgradePosition;
 import com.hopkins.rocknrollracing.state.UpgradeType;
 import com.hopkins.rocknrollracing.utils.ImageUtils;
+import com.hopkins.rocknrollracing.utils.StringUtils;
 import com.hopkins.rocknrollracing.views.elements.*;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -99,19 +100,19 @@ public class UpgradeView extends AppView {
             Upgrade current = playerState.getCurrentUpgrade(type);
             
             text = String.format(HOVER_TEXT,
-                    playerState.Money,
+                    StringUtils.formatNumber(playerState.Money),
                     current.getName()
                     );
             if (playerState.canUpgrade(type)) {
                 if (isAmmo) {
                     text += String.format(AMMO_TEXT,
                             current.getSingle(),
-                            current.getPrice());
+                            StringUtils.formatNumber(current.getPrice()));
                 } else {
                     Upgrade upgrade = playerState.getNextUpgrade(type);
                     text += String.format(UPGRADE_TEXT,
                             upgrade.getName(),
-                            upgrade.getPrice());
+                            StringUtils.formatNumber(upgrade.getPrice()));
                 }
             }
         }

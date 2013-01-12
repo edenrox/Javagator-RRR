@@ -4,6 +4,8 @@
  */
 package com.hopkins.rocknrollracing.trackeditor;
 
+import com.hopkins.rocknrollracing.state.track.Track;
+import com.hopkins.rocknrollracing.state.track.TrackPieceType;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -79,7 +81,7 @@ public class TrackPanel extends JPanel  {
         
         for(int y = 0; y < Track.HEIGHT; y++) {
             for (int x = 0; x < Track.WIDTH; x++) {
-                PieceType type = track.getPiece(x, y).getType();
+                TrackPieceType type = track.getPiece(x, y).getType();
                 pieceRenderer.render(g, x * TILE_WIDTH * SCALE, y * TILE_HEIGHT * SCALE, SCALE, type);
             }
         }

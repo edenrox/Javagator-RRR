@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hopkins.rocknrollracing.state;
+package com.hopkins.rocknrollracing.state.race;
 
+import com.hopkins.rocknrollracing.state.HasFace;
 import com.hopkins.rocknrollracing.utils.ArrayUtils;
 
 /**

@@ -18,7 +18,7 @@ public class ControllerState implements KeyListener {
     public static final Logger log = Logger.getLogger(ControllerState.class);
     public static final ControllerButton[] ANY_BUTTONS = new ControllerButton[] {
         ControllerButton.Pause, ControllerButton.Boost, ControllerButton.Drop,
-        ControllerButton.Fire, ControllerButton.Pause};
+        ControllerButton.Fire, ControllerButton.Gas};
 
     protected ButtonState buttonStates[];
     protected KeyMap map;

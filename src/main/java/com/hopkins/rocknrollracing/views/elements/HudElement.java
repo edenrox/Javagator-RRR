@@ -4,7 +4,13 @@
  */
 package com.hopkins.rocknrollracing.views.elements;
 
-import com.hopkins.rocknrollracing.state.RaceState;
+import com.hopkins.rocknrollracing.state.Boost;
+import com.hopkins.rocknrollracing.state.Drop;
+import com.hopkins.rocknrollracing.state.Weapon;
+import com.hopkins.rocknrollracing.state.race.BonusType;
+import com.hopkins.rocknrollracing.state.race.CarRaceItem;
+import com.hopkins.rocknrollracing.state.race.RaceState;
+import com.hopkins.rocknrollracing.state.track.Track;
 import com.hopkins.rocknrollracing.utils.ImageUtils;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -14,20 +20,127 @@ import java.awt.image.BufferedImage;
  * @author ian
  */
 public class HudElement extends AppElement {
-    public static String SPRITE_PATH = "images/hud/tiles.png";
+    public static final String PAUSE_TEXT = "Give Up?";
+    public static final String LAPS_FORMAT = "Laps %d";
     
-    BufferedImage tiles;
+    public static final String SPRITE_PATH = "images/hud/%s.png";
+    public static final String TRACK_SPRITE_PATH = "images/hud/track.png";
+    
+    public static final int CHARGES_WIDTH = 16;
+    public static final int CHARGES_HEIGHT = 16;
+    public static final int ARMOR_WIDTH = 8;
+    public static final int ARMOR_HEIGHT = 8;
+    public static final int PIECE_WIDTH = 8;
+    public static final int PIECE_HEIGHT = 8;
+    
+    protected BufferedImage charges, track, armor, colors;
+    protected FontBasicElement font;
 
     @Override
     public void load() throws Exception {
-        tiles = ImageUtils.loadSprite(SPRITE_PATH);
+        charges = loadSprite("charges");
+        track = loadSprite("track");
+        armor = loadSprite("armor");
+        colors = loadSprite("colors");
+        
+        font = new FontBasicElement();
+        font.load();
+    }
+    
+    protected BufferedImage loadSprite(String name) throws Exception {
+        return ImageUtils.loadSprite(String.format(SPRITE_PATH, name));
     }
     
     
-    public void renderHud(Graphics g, RaceState rs) {
+    public void renderHud(Graphics g, RaceState rs, long ticks) {
+        
+        CarRaceItem playerCar = rs.getCars().get(0);
+        
+        renderTrack(g, rs);
+        renderCharges(g, playerCar);
+        renderArmor(g, playerCar.Armor);
+        renderLaps(g, rs.NumLaps - playerCar.getLap());
+        if (rs.PlayerPaused > 0) {
+            renderPaused(g, ticks);
+        } else {
+            //renderBonus(g, )
+        }
+    }
+    
+    protected void renderTrack(Graphics g, RaceState rs) {
+        int ox = 8;
+        int oy = 8;
+        int ordinal = 0;
+        
+        // Render the car positions
+        for(CarRaceItem cri : rs.getCars()) {
+            ordinal = cri.getColor().ordinal();
+            int px = ox;
+            int py = oy;
+            
+            SpriteRenderer.render(g, colors, px, py, PIECE_WIDTH, PIECE_HEIGHT, ordinal, false, false);
+        }
+        
+        // Render the track
+        for(int y = 0; y < Track.HEIGHT; y++) {
+            for (int x = 0; x < Track.WIDTH; x++) {
+                ordinal = rs.getTrack().getPiece(x, y).getType().ordinal();
+                int px = ox + x * PIECE_WIDTH;
+                int py = oy + y * PIECE_HEIGHT;
+                SpriteRenderer.render(g, track, px, py, PIECE_WIDTH, PIECE_HEIGHT, ordinal, false, false);
+            }
+        }
+    }
+    
+    protected void renderCharges(Graphics g, CarRaceItem playerCar) {
+        Weapon weapon = playerCar.getModel().getWeapon();
+        Drop drop = playerCar.getModel().getDrop();
+        Boost boost = playerCar.getModel().getBoost();
+        
+        renderCharge(g, 88, 9, weapon.ordinal(), playerCar.Charges[0]);
+        renderCharge(g, 121, 9, 3 + boost.ordinal(), playerCar.Charges[1]);
+        renderCharge(g, 152, 9, 5 + drop.ordinal(), playerCar.Charges[2]);
+    }
+    
+    protected void renderCharge(Graphics g, int x, int y, int frame, int quantity) {
+        SpriteRenderer.render(g, charges, x, y, CHARGES_WIDTH, CHARGES_HEIGHT, frame, false, false);
+        
+        font.renderText(g, x+16, y+7, "" + quantity);
+    }
+    
+    protected void renderBonus(Graphics g, BonusType bonus) {
         
     }
     
+    protected void renderPaused(Graphics g, long ticks) {
+        
+        font.renderText(g, 100, 100, PAUSE_TEXT);
+        
+    }
+    
+    protected void renderLaps(Graphics g, int lapsRemaining) {
+        String text = String.format(LAPS_FORMAT, lapsRemaining);
+        font.renderText(g, 192, 8, text);
+    }
+    
+    protected void renderArmor(Graphics g, int armorRemaining) {
+        int x = 192;
+        int y = 16;
+        int offset = 0;
+        
+        if (armorRemaining < 4) {
+            offset = 2;
+        }
+        
+        while (armorRemaining > 1) {
+            SpriteRenderer.render(g, armor, x, y, ARMOR_WIDTH, ARMOR_HEIGHT, offset, false, false);
+            x += 8;
+            armorRemaining -=2;
+        }
+        if (armorRemaining > 0) {
+            SpriteRenderer.render(g, armor, x, y, ARMOR_WIDTH, ARMOR_HEIGHT, offset+1, false, false);
+        }
+    }
     
     
 }

@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hopkins.rocknrollracing.trackeditor;
+package com.hopkins.rocknrollracing.state.track;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Calendar; 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -19,7 +19,7 @@ public class Track {
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
     
-    protected Piece[] pieces;
+    protected TrackPiece[] pieces;
     protected String notes;
     
     public String getNotes() {
@@ -31,18 +31,18 @@ public class Track {
     
     public Track() {
         // initialize the pieces
-        pieces = new Piece[WIDTH * HEIGHT];
+        pieces = new TrackPiece[WIDTH * HEIGHT];
         clear();
     }
     
     public final void clear() {
         for (int i = 0; i < pieces.length; i++) {
-            pieces[i] = new Piece();
+            pieces[i] = new TrackPiece();
         }
         notes = "";
     }
     
-    public Piece getPiece(int x, int y) {
+    public TrackPiece getPiece(int x, int y) {
         if ((x < 0) || (y < 0) || (x >= WIDTH) || (y >= HEIGHT)) {
             throw new IndexOutOfBoundsException(String.format(
                     "Index passed in was out of bounds: {x: %d, y: %d, w: %d, h: %d}",
@@ -58,10 +58,10 @@ public class Track {
             for (int y = 0; y < HEIGHT; y++) {
                 // 
                 
-                Piece p = getPiece(x, y);
-                PieceType type = p.getType();
-                if ((type == PieceType.StartRight) ||
-                        (type == PieceType.StartUp)) {
+                TrackPiece p = getPiece(x, y);
+                TrackPieceType type = p.getType();
+                if ((type == TrackPieceType.StartRight) ||
+                        (type == TrackPieceType.StartUp)) {
                     numStart++;
                 }
             }

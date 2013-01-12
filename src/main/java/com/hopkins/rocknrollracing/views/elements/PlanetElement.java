@@ -113,20 +113,9 @@ public class PlanetElement extends AppElement {
     }
     
     public void renderStar(Graphics g, int x, int y, int intensity) {
-        int sx1, sx2, sy1, sy2;
-        int dx1, dx2, dy1, dy2;
+        int frame = MathUtils.forceInRange(intensity - 1, 0, STAR_COUNT - 1);
         
-        sx1 = STAR_WIDTH * MathUtils.forceInRange(intensity - 1, 0, STAR_COUNT - 1);
-        sx2 = sx1 + STAR_WIDTH;
-        sy1 = 0;
-        sy2 = sy1 + STAR_HEIGHT;
-        
-        dx1 = x;
-        dx2 = dx1 + STAR_WIDTH;
-        dy1 = y;
-        dy2 = dy1 + STAR_HEIGHT;
-        
-        g.drawImage(stars, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
+        SpriteRenderer.render(g, stars, x, y, STAR_WIDTH, STAR_HEIGHT, frame, false, false);
     }
     
     

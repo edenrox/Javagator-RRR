@@ -64,21 +64,10 @@ public class BetweenChargesElement extends AppElement {
     }
     
     protected void renderIcon(Graphics g, int x, int y, BufferedImage image, int offset) {
-        int dx1, dx2, dy1, dy2, sx1, sx2, sy1, sy2;
         
         panelElement.renderBlackInlayGrey(g, x, y, 18, 18);
         
-        dx1 = x + 2;
-        dx2 = dx1 + ICON_WIDTH;
-        dy1 = y + 2;
-        dy2 = dy1 + ICON_HEIGHT;
-        
-        sx1 = ICON_WIDTH * offset;
-        sx2 = sx1 + ICON_WIDTH;
-        sy1 = 0;
-        sy2 = sy1 + ICON_HEIGHT;
-
-        g.drawImage(image, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
+        SpriteRenderer.render(g, image, x, y, ICON_WIDTH, ICON_HEIGHT, offset, false, false);
     }
     
     protected void renderCharges(Graphics g, int x, int y, int charges) {

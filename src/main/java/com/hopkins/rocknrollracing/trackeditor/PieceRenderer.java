@@ -4,6 +4,8 @@
  */
 package com.hopkins.rocknrollracing.trackeditor;
 
+import com.hopkins.rocknrollracing.state.track.TrackPiece;
+import com.hopkins.rocknrollracing.state.track.TrackPieceType;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -31,9 +33,9 @@ public class PieceRenderer {
         } catch (Exception ex) {
             System.err.println("Error: " + ex.toString());
         }
-    }
+    } 
     
-    public void render(Graphics g, int dx, int dy, float scale, PieceType type) {
+    public void render(Graphics g, int dx, int dy, float scale, TrackPieceType type) {
         int index = type.ordinal() - 1;
         if (index < 0) {
             return;

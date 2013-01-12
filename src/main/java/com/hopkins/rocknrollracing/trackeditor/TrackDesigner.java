@@ -11,6 +11,9 @@
 package com.hopkins.rocknrollracing.trackeditor;
 
 
+import com.hopkins.rocknrollracing.state.track.TrackPiece;
+import com.hopkins.rocknrollracing.state.track.Track;
+import com.hopkins.rocknrollracing.state.track.TrackPieceType;
 import com.hopkins.rocknrollracing.trackeditor.TrackPanel.TileClickEvent;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -464,11 +467,11 @@ public class TrackDesigner extends javax.swing.JFrame {
         listButtons.toArray(buttons);
         
         
-        PieceType[] types = PieceType.values();
+        TrackPieceType[] types = TrackPieceType.values();
         
         for(int i = 0; i < 18; i++) {
             AbstractButton button = buttons[i];
-            PieceType type = types[(i+1) % 18];
+            TrackPieceType type = types[(i+1) % 18];
             
             BufferedImage iconBuffer = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
             Graphics g = iconBuffer.getGraphics();
@@ -489,7 +492,7 @@ public class TrackDesigner extends javax.swing.JFrame {
     }//GEN-LAST:event_onQuit
 
     private void doSave() {
-        track.notes = notes.getText();
+        track.setNotes(notes.getText());
         JSONObject obj = track.toJSON();
         try {
             FileWriter fw = new FileWriter(curFilename);
@@ -534,7 +537,7 @@ public class TrackDesigner extends javax.swing.JFrame {
         
         // load the JSON into the track
         track.fromJSON(obj);
-        notes.setText(track.notes);
+        notes.setText(track.getNotes());
         minimap.repaint();
     }//GEN-LAST:event_onOpen
 
@@ -546,7 +549,6 @@ public class TrackDesigner extends javax.swing.JFrame {
     }//GEN-LAST:event_onNew
 
     private void onSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onSave
-        // TODO add your handling code here:
         if (curFilename.length() == 0) {
             onSaveAs(evt);
         } else {
@@ -556,7 +558,7 @@ public class TrackDesigner extends javax.swing.JFrame {
 
     private void onPieceChange(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onPieceChange
         if (getToolType() == ToolType.Inspect) {
-            Piece p = track.getPiece(minimap.getSelectedTile().x, minimap.getSelectedTile().y);
+            TrackPiece p = track.getPiece(minimap.getSelectedTile().x, minimap.getSelectedTile().y);
             p.setType(getPieceType());
             minimap.repaint();
         }
@@ -570,11 +572,11 @@ public class TrackDesigner extends javax.swing.JFrame {
         }
     }
     
-    private PieceType getPieceType() {
-        return PieceType.valueOf(pieceBG.getSelection().getActionCommand());
+    private TrackPieceType getPieceType() {
+        return TrackPieceType.valueOf(pieceBG.getSelection().getActionCommand());
     }
     
-    private void setPieceType(PieceType type) {
+    private void setPieceType(TrackPieceType type) {
         int index = type.ordinal();
         buttons[index].setSelected(true);
     }
@@ -587,7 +589,7 @@ public class TrackDesigner extends javax.swing.JFrame {
                 break;
             case Inspect:
                 // load the piece
-                PieceType type = track.getPiece(evt.getTile().x, evt.getTile().y).getType();
+                TrackPieceType type = track.getPiece(evt.getTile().x, evt.getTile().y).getType();
                 setPieceType(type);
                 break;
         }

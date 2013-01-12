@@ -83,7 +83,7 @@ public class OptionsView extends ViewWithBackground {
         cs.trackZ = 0;
         cs.z = 0;
         
-        cs.angle = 21;
+        cs.frame = 21;
         cs.model = CarModel.BattleTrak;
         cs.color = CarColor.Blue;
         cs.x = 12;
@@ -96,7 +96,7 @@ public class OptionsView extends ViewWithBackground {
         cs.y = 82;
         carElement.render(g, cs);
         
-        cs.angle = 3;
+        cs.frame = 3;
         cs.model = CarModel.Marauder;
         cs.color = CarColor.Green;
         cs.x = 198;

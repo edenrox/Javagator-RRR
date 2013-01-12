@@ -626,7 +626,7 @@ public class StateDesigner extends javax.swing.JFrame {
         int colorIndex = Integer.parseInt(getSelectedButton(colorBG).getActionCommand());
         
         CarState cs = new CarState();
-        cs.angle = 2;
+        cs.frame = 2;
         cs.color = CarColor.All[colorIndex];
         cs.model = CarModel.All[modelIndex];
         

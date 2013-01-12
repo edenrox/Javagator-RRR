@@ -44,19 +44,8 @@ public class FontBasicElement extends AppElement {
         letter = Character.toUpperCase(letter);
         if (inRange(letter)) {
             int index = indexOf(letter);
-            int dx1, dx2, dy1, dy2, sx1, sx2, sy1, sy2;
             
-            sx1 = index * WIDTH;
-            sx2 = sx1 + WIDTH;
-            sy1 = 0;
-            sy2 = sy1 + HEIGHT;
-            
-            dx1 = x;
-            dx2 = dx1 + WIDTH;
-            dy1 = y;
-            dy2 = dy1 + HEIGHT;
-            
-            g.drawImage(source, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
+            SpriteRenderer.render(g, source, x, y, WIDTH, HEIGHT, index, false, false);
         }
     }
     
