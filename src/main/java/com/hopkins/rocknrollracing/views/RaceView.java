@@ -12,7 +12,6 @@ import com.hopkins.rocknrollracing.state.race.CarRaceItem;
 import com.hopkins.rocknrollracing.state.race.RaceItem;
 import com.hopkins.rocknrollracing.state.race.RaceState;
 import com.hopkins.rocknrollracing.views.elements.*;
-import java.awt.Color;
 import java.awt.Graphics;
 
 /**
@@ -31,7 +30,10 @@ public class RaceView extends AppView {
     protected WeaponElement weapon;
     
     @Inject
-    protected TrackElement track;
+    protected TrackPieceElement track;
+    
+    @Inject
+    protected RaceDebugElement debug;
     
     public RaceState RaceState;
 
@@ -43,7 +45,7 @@ public class RaceView extends AppView {
     @Override
     public void render(Graphics g, long ticks) {
         // render the track
-        track.renderAll(g);
+        //track.renderAll(g);
         
         // render the projectiles and items
         for(RaceItem ri : RaceState.getItems()) {
@@ -79,6 +81,8 @@ public class RaceView extends AppView {
         
         // render the HUD on top of everything
         hud.renderHud(g, RaceState, ticks);
+        
+        debug.render(g, RaceState.getCars().get(0));
     }
 
 }

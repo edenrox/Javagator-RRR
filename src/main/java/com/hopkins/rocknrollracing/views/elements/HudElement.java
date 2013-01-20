@@ -24,7 +24,6 @@ public class HudElement extends AppElement {
     public static final String LAPS_FORMAT = "Laps %d";
     
     public static final String SPRITE_PATH = "images/hud/%s.png";
-    public static final String TRACK_SPRITE_PATH = "images/hud/track.png";
     
     public static final int CHARGES_WIDTH = 16;
     public static final int CHARGES_HEIGHT = 16;
@@ -33,18 +32,20 @@ public class HudElement extends AppElement {
     public static final int PIECE_WIDTH = 8;
     public static final int PIECE_HEIGHT = 8;
     
-    protected BufferedImage charges, track, armor, colors;
+    protected BufferedImage charges, armor, colors;
     protected FontBasicElement font;
+    protected HudTrackElement track;
 
     @Override
     public void load() throws Exception {
         charges = loadSprite("charges");
-        track = loadSprite("track");
         armor = loadSprite("armor");
-        colors = loadSprite("colors");
         
         font = new FontBasicElement();
         font.load();
+        
+        track = new HudTrackElement();
+        track.load();
     }
     
     protected BufferedImage loadSprite(String name) throws Exception {
@@ -56,7 +57,8 @@ public class HudElement extends AppElement {
         
         CarRaceItem playerCar = rs.getCars().get(0);
         
-        renderTrack(g, rs);
+        track.renderCarPositions(g, 8, 8, rs);
+        track.renderTrack(g, 8, 8, rs.getTrack());
         renderCharges(g, playerCar);
         renderArmor(g, playerCar.Armor);
         renderLaps(g, rs.NumLaps - playerCar.getLap());
@@ -67,30 +69,7 @@ public class HudElement extends AppElement {
         }
     }
     
-    protected void renderTrack(Graphics g, RaceState rs) {
-        int ox = 8;
-        int oy = 8;
-        int ordinal = 0;
-        
-        // Render the car positions
-        for(CarRaceItem cri : rs.getCars()) {
-            ordinal = cri.getColor().ordinal();
-            int px = ox;
-            int py = oy;
-            
-            SpriteRenderer.render(g, colors, px, py, PIECE_WIDTH, PIECE_HEIGHT, ordinal, false, false);
-        }
-        
-        // Render the track
-        for(int y = 0; y < Track.HEIGHT; y++) {
-            for (int x = 0; x < Track.WIDTH; x++) {
-                ordinal = rs.getTrack().getPiece(x, y).getType().ordinal();
-                int px = ox + x * PIECE_WIDTH;
-                int py = oy + y * PIECE_HEIGHT;
-                SpriteRenderer.render(g, track, px, py, PIECE_WIDTH, PIECE_HEIGHT, ordinal, false, false);
-            }
-        }
-    }
+    
     
     protected void renderCharges(Graphics g, CarRaceItem playerCar) {
         Weapon weapon = playerCar.getModel().getWeapon();

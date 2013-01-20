@@ -15,6 +15,7 @@ import com.hopkins.rocknrollracing.state.track.TrackPiece;
 import com.hopkins.rocknrollracing.state.track.Track;
 import com.hopkins.rocknrollracing.state.track.TrackPieceType;
 import com.hopkins.rocknrollracing.trackeditor.TrackPanel.TileClickEvent;
+import com.hopkins.rocknrollracing.views.elements.HudTrackElement;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -36,31 +37,48 @@ import org.json.simple.parser.JSONParser;
 public class TrackDesigner extends javax.swing.JFrame {
 
     protected String curFilename;
-    protected PieceRenderer pieceRenderer;
     protected Track track;
     protected TrackPanel minimap;
+    protected PreviewPanel preview;
+    protected HudTrackElement hudTrackElement;
     protected AbstractButton[] buttons;
     
     /** Creates new form TrackDesigner */
     public TrackDesigner() {
         curFilename = "";
         initComponents();
-        pieceRenderer = new PieceRenderer();
+        
+        try {
+            hudTrackElement = new HudTrackElement();
+            hudTrackElement.load();
+            hudTrackElement.setScale(2.0f);
+        } catch (Exception ex) {
+            System.err.println("Error loading HUD Track Element: " + ex.toString());
+        }
+        
         track = new Track();
         setButtonIcons();
-        minimap = new TrackPanel(track, pieceRenderer);
+        minimap = new TrackPanel(track, hudTrackElement);
         jPanel1.add(minimap);
         minimap.addTileClickListener(new TrackPanel.TileClickListener() {
             public void tileClicked(TileClickEvent event) {
                 onTileClick(event);
             }
         });
-        //minimap.setBounds(0, 0, 256, 256);
+        
+        preview = new PreviewPanel();
+        jPanel4.add(preview);
+        
+        setPieceType(TrackPieceType.CornerDownRight);
         
         fileDialog.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
-                return f.getName().toLowerCase().endsWith(".json");
+                if (f.isDirectory()) {
+                    return true;
+                } else {
+                    return f.getName().toLowerCase().endsWith(".json");
+                }
             }
             @Override
             public String getDescription() {
@@ -84,8 +102,6 @@ public class TrackDesigner extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        featureSelect = new javax.swing.JComboBox();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -114,6 +130,7 @@ public class TrackDesigner extends javax.swing.JFrame {
         toolPaint = new javax.swing.JToggleButton();
         toolInspect = new javax.swing.JToggleButton();
         jLabel7 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -128,15 +145,11 @@ public class TrackDesigner extends javax.swing.JFrame {
         setTitle("Track Designer");
         setResizable(false);
 
-        jLabel1.setText("Mini Map");
+        jLabel1.setText("Track");
 
         jLabel2.setText("Height");
 
         jLabel3.setText("Pieces");
-
-        jLabel4.setText("Special Options");
-
-        featureSelect.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Puddle", "Arrow" }));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
@@ -327,6 +340,10 @@ public class TrackDesigner extends javax.swing.JFrame {
 
         jLabel7.setText("Preview");
 
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel4.setPreferredSize(new java.awt.Dimension(400, 120));
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
+
         jMenu1.setText("File");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
@@ -397,29 +414,20 @@ public class TrackDesigner extends javax.swing.JFrame {
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(114, 114, 114)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(74, 74, 74)
-                                        .addComponent(jLabel7))))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(170, 170, 170)
+                            .addComponent(jLabel3)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(featureSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))))
-                .addGap(455, 455, 455))
+                            .addComponent(jLabel5)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel2))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel6)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -439,16 +447,15 @@ public class TrackDesigner extends javax.swing.JFrame {
                             .addComponent(jLabel5)
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(85, 85, 85)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel4)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(featureSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -475,7 +482,7 @@ public class TrackDesigner extends javax.swing.JFrame {
             
             BufferedImage iconBuffer = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
             Graphics g = iconBuffer.getGraphics();
-            pieceRenderer.render(g, 0, 0, 2.0f, type);
+            hudTrackElement.renderPiece(g, 0, 0, type);
             g.dispose();
             ImageIcon icon = new ImageIcon(iconBuffer);
             
@@ -561,6 +568,8 @@ public class TrackDesigner extends javax.swing.JFrame {
             TrackPiece p = track.getPiece(minimap.getSelectedTile().x, minimap.getSelectedTile().y);
             p.setType(getPieceType());
             minimap.repaint();
+        } else {
+            preview.setType(getPieceType());
         }
     }//GEN-LAST:event_onPieceChange
 
@@ -578,7 +587,8 @@ public class TrackDesigner extends javax.swing.JFrame {
     
     private void setPieceType(TrackPieceType type) {
         int index = type.ordinal();
-        buttons[index].setSelected(true);
+        buttons[(index + 17) % 18].setSelected(true);
+        preview.setType(getPieceType());
     }
     
     private void onTileClick(TrackPanel.TileClickEvent evt) {
@@ -633,12 +643,10 @@ public class TrackDesigner extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox featureSelect;
     private javax.swing.JFileChooser fileDialog;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -652,6 +660,7 @@ public class TrackDesigner extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;

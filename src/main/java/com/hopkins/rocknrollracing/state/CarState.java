@@ -25,6 +25,6 @@ public class CarState  {
     }
     
     public static int getFrameFromAngle(int angle) {
-        return (NUM_FRAMES + 18 - angle) % NUM_FRAMES;
+        return (NUM_FRAMES + 18 - (angle / 15)) % NUM_FRAMES;
     }
 }

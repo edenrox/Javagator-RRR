@@ -6,12 +6,14 @@ package com.hopkins.rocknrollracing.trackeditor;
 
 import com.hopkins.rocknrollracing.state.track.Track;
 import com.hopkins.rocknrollracing.state.track.TrackPieceType;
+import com.hopkins.rocknrollracing.views.elements.HudTrackElement;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 /**
@@ -23,16 +25,17 @@ public class TrackPanel extends JPanel  {
     public static final int TILE_HEIGHT = 8;
     public static final int SCALE = 2;
     
-    protected PieceRenderer pieceRenderer;
+    protected HudTrackElement trackRenderer;
     protected Point selectedTile;
     protected Track track;
     protected TileClickListener tcListener;
+    protected BufferedImage buffer;
     
-    public TrackPanel(Track trk, PieceRenderer renderer) {
+    public TrackPanel(Track trk, HudTrackElement renderer) {
         tcListener = null;
         track = trk;
         selectedTile = new Point(0, 0);
-        pieceRenderer = renderer;
+        trackRenderer = renderer;
         setPreferredSize(new Dimension(Track.WIDTH * TILE_WIDTH * SCALE, Track.HEIGHT * TILE_HEIGHT * SCALE));
         setDoubleBuffered(true);
         
@@ -79,13 +82,10 @@ public class TrackPanel extends JPanel  {
     public void paint(Graphics g) {
         g.clearRect(0, 0, this.getWidth(), this.getHeight());
         
-        for(int y = 0; y < Track.HEIGHT; y++) {
-            for (int x = 0; x < Track.WIDTH; x++) {
-                TrackPieceType type = track.getPiece(x, y).getType();
-                pieceRenderer.render(g, x * TILE_WIDTH * SCALE, y * TILE_HEIGHT * SCALE, SCALE, type);
-            }
-        }
+        // Track
+        trackRenderer.renderTrack(g, 0, 0, track);
         
+        // Cursor
         g.setColor(Color.red);
         g.drawRect(selectedTile.x * TILE_WIDTH * SCALE, 
                 selectedTile.y * TILE_HEIGHT * SCALE,

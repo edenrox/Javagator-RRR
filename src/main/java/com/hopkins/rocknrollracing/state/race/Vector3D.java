@@ -61,4 +61,12 @@ public class Vector3D {
         this.Y = y;
         this.Z = z;
     }
+    
+    public int getAngle() {
+        int angle = (int) Math.round(Math.atan2(-this.Y, this.X) * 180 / Math.PI);
+        if (angle < 0) {
+            angle = 360 + angle;
+        }
+        return angle;
+    }
 }

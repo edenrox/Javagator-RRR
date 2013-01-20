@@ -10,7 +10,7 @@ package com.hopkins.rocknrollracing.utils;
  */
 public class MathUtils {
     
-    public static final int MAX_ANGLE = 24;
+    public static final int MAX_ANGLE = 360;
     
     public static final float[] COS;
     public static final float[] SIN;
@@ -19,8 +19,8 @@ public class MathUtils {
         COS = new float[MAX_ANGLE];
         SIN = new float[MAX_ANGLE];
         for (int i = 0; i < MAX_ANGLE; i++) {
-            COS[i] = (float) Math.cos(i / 12.0 * Math.PI);
-            SIN[i] = (float) Math.sin(i / 12.0 * Math.PI);
+            COS[i] = (float) Math.cos(i * Math.PI / 180);
+            SIN[i] = (float) Math.sin(i * Math.PI / 180);
         }
     }
     

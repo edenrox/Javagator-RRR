@@ -50,12 +50,13 @@ public class RaceState {
         //Player
         cars.add(new CarRaceItem(gameState.Player1.Model, gameState.Player1.Color));
         cars.get(0).Armor = 6 + 2 * gameState.Player1.Upgrades.getLevel(UpgradeType.Armor);
-        cars.get(0).getPosition().set(128, 64, 0);
+        cars.get(0).getPosition().set(32, 64, 0);
         
         // Rival
         cars.add(new CarRaceItem(gameState.Rival.getModel(), CarColor.Purple));
-        cars.get(1).getPosition().set(128, 128, 0);
+        cars.get(1).getPosition().set(32, 128, 0);
         
+        /*
         // Rip
         cars.add(new CarRaceItem(gameState.Rival.getModel(), CarColor.Gray));
         cars.get(2).getPosition().set(64, 64, 0);
@@ -63,6 +64,7 @@ public class RaceState {
         // Shred
         cars.add(new CarRaceItem(gameState.Rival.getModel(), CarColor.Orange));
         cars.get(3).getPosition().set(64, 128, 0);
+        */
         
         // Load track
         initializeStaticTrack();

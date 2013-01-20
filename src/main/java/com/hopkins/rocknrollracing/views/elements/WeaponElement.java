@@ -41,7 +41,7 @@ public class WeaponElement extends AppElement {
     }
     
     protected int getFrameFromAngle(int angleInDegrees) {
-        switch (angleInDegrees % 12) {
+        switch (angleInDegrees / 15 % 12) {
             case 0:
                 return 0;
             case 1:
@@ -64,10 +64,10 @@ public class WeaponElement extends AppElement {
     }
     
     protected boolean isVFlip(int angleInDegrees) {
-        return (angleInDegrees < 12);
+        return (angleInDegrees < 180);
     }
     protected boolean isHFlip(int angleInDegrees) {
-        return (angleInDegrees > 6) && (angleInDegrees < 18);
+        return (angleInDegrees > 90) && (angleInDegrees < 270);
     }
     
     public void renderProjectile(Graphics g, int x, int y, int angleInDegrees, Weapon weapon) {
