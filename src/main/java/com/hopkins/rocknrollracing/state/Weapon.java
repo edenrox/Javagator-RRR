@@ -11,9 +11,9 @@ import com.hopkins.rocknrollracing.utils.ArrayUtils;
  * @author ian
  */
 public class Weapon {
-    public static final Weapon Plasma = new Weapon("VK Plasma Rifle", 1.0f, 6.0f);
-    public static final Weapon Missile = new Weapon("Rogue Missile", 2.0f, 6.0f);
-    public static final Weapon Sundog = new Weapon("Sundog Beam", 1.0f, 5.5f);
+    public static final Weapon Plasma = new Weapon("VK Plasma Rifle", 2f, 0.14f);
+    public static final Weapon Missile = new Weapon("Rogue Missile", 2f, 0.14f);
+    public static final Weapon Sundog = new Weapon("Sundog Beam", 1f, 0.1f);
     
     public static final Weapon[] All = new Weapon[] {
         Plasma, Missile, Sundog

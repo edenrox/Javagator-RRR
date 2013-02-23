@@ -22,7 +22,6 @@ public class WeaponElement extends AppElement {
     
     protected BufferedImage plasma, missile, sundog;
     protected BufferedImage oil, mine, scatterpack;
-    protected SmokeElement smoke;
 
     @Override
     public void load() throws Exception {
@@ -32,8 +31,6 @@ public class WeaponElement extends AppElement {
         oil = loadSprite("oil");
         mine = loadSprite("mine");
         scatterpack = loadSprite("scatterpack");
-        smoke = new SmokeElement();
-        smoke.load();
     }
     
     protected BufferedImage loadSprite(String name) throws Exception {
@@ -46,16 +43,16 @@ public class WeaponElement extends AppElement {
                 return 0;
             case 1:
             case 2:
+            case 3:
+            case 9:
             case 10:
             case 11:
                 return 1;
-            case 3:
-            case 9:
-                return 2;
             case 4:
+            case 8:
+                return 2;
             case 5:
             case 7:
-            case 8:
                 return 3;
             case 6:
                 return 4;

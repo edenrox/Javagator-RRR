@@ -8,7 +8,6 @@ import com.hopkins.rocknrollracing.state.CarColor;
 import com.hopkins.rocknrollracing.state.CarModel;
 import com.hopkins.rocknrollracing.state.CarState;
 import com.hopkins.rocknrollracing.views.elements.CarElement;
-import com.hopkins.rocknrollracing.views.elements.FontBasicElement;
 import com.hopkins.rocknrollracing.views.elements.FontIntroElement;
 import java.awt.Color;
 import java.awt.Graphics2D;

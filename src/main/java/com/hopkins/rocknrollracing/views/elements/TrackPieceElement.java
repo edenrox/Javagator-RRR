@@ -25,7 +25,7 @@ public class TrackPieceElement extends AppElement {
     public static final int WIDTH = 13 * TILE_WIDTH;
     public static final int HEIGHT = 14 * TILE_HEIGHT;
     
-    public boolean DebugMode = true;
+    public boolean DebugMode = false;
     
     protected BufferedImage
             road, edgeTop, edgeBottom,
@@ -59,6 +59,7 @@ public class TrackPieceElement extends AppElement {
     
     
     public void renderPiece(Graphics g, int x, int y, TrackPieceType type) {
+        x = x - WIDTH / 2;
         switch (type) {
             case NotDown:
                 renderRoad(g, x, y, true, true, false, true);

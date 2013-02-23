@@ -11,7 +11,7 @@ import com.hopkins.rocknrollracing.state.race.RaceResult;
  * @author ian
  */
 public class GameState {
-    public Difficulty Difficulty;
+    public Difficulty GameDifficulty;
     public PlayerState Player1;
     public PlayerState Player2;
     public int NumPlayers;
@@ -23,7 +23,7 @@ public class GameState {
     public RaceResult LastRaceResult;
     
     public GameState() {
-        Difficulty = Difficulty.Rookie;
+        GameDifficulty = GameDifficulty.Rookie;
         Player1 = new PlayerState();
         NumPlayers = 1;
         Mode = GameMode.Career;
@@ -52,6 +52,31 @@ public class GameState {
         return null;
     }
     
+    public UpgradeState getRivalUpgradeState() {
+        int parts = 0;
+        int charges = 0;
+        if (GameDifficulty == Difficulty.Rookie) {
+            parts = 0;
+            charges = 1;
+        }
+        if (GameDifficulty == Difficulty.Veteran) {
+            parts = 1;
+            charges = 3;
+        }
+        if (GameDifficulty == Difficulty.Warrior) {
+            parts = 2;
+            charges = 5;
+        }
+        if (Division == Division.A) {
+            parts += 1;
+            charges += 2;
+        }
+        UpgradeState us = new UpgradeState();
+        us.setLevels(UpgradeType.Charges, charges);
+        us.setLevels(UpgradeType.Parts, parts);
+        return us;
+    }
+    
     
     public boolean canAdvancePlanet() {
         if (Player1.Points >= Rival.getPointsRequired()) {
@@ -71,4 +96,5 @@ public class GameState {
         }
         Player1.Points = 0;
     }
+    
 }

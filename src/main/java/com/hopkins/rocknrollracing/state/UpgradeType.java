@@ -10,5 +10,8 @@ package com.hopkins.rocknrollracing.state;
  */
 public enum UpgradeType {
     Armor, Engine, Shocks, Tires,
-    Weapon, Boost, Drop
+    Weapon, Boost, Drop;
+    
+    public static UpgradeType[] Charges = new UpgradeType[] {Weapon, Boost, Drop};
+    public static UpgradeType[] Parts = new UpgradeType[] {Armor, Engine, Shocks, Tires};
 }

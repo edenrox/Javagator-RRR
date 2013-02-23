@@ -5,7 +5,9 @@
 package com.hopkins.rocknrollracing.views.elements;
 
 import com.hopkins.rocknrollracing.state.race.CarRaceItem;
+import com.hopkins.rocknrollracing.state.race.Coord;
 import com.hopkins.rocknrollracing.state.race.RaceState;
+import com.hopkins.rocknrollracing.state.race.World;
 import com.hopkins.rocknrollracing.state.track.Track;
 import com.hopkins.rocknrollracing.state.track.TrackPieceType;
 import com.hopkins.rocknrollracing.utils.ImageUtils;
@@ -48,10 +50,12 @@ public class HudTrackElement extends AppElement  {
     
     public void renderCarPositions(Graphics g, int ox, int oy, RaceState rs) {
         // Render the car positions
-        for(CarRaceItem cri : rs.getCars()) {
+        for (int i = rs.getCars().size() - 1; i >= 0; i--) {
+            CarRaceItem cri = rs.getCars().get(i);
             int ordinal = cri.getColor().ordinal();
-            int px = ox;
-            int py = oy;
+            Coord c = World.toMapPosition(cri.getPosition());
+            int px = ox + c.X * WIDTH;
+            int py = oy + c.Y * HEIGHT;
             
             SpriteRenderer.render(g, colors, px, py, WIDTH, HEIGHT, ordinal, false, false, scale);
         }

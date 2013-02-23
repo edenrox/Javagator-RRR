@@ -14,5 +14,15 @@ public enum TrackPieceType {
     StraightRight, StraightUp, StartRight, StartUp, 
     JumpRight, JumpLeft, JumpUp, JumpDown,  
     NotUp, NotDown, NotRight, NotLeft,
-    Cross
+    Cross;
+    
+    
+    public boolean isCorner() {
+        return ((this == CornerDownLeft) || (this == CornerDownRight) ||
+                (this == CornerUpLeft) || (this == CornerUpRight));
+    }
+    
+    public boolean isStart() {
+        return (this == StartUp) || (this == StartRight);
+    }
 }

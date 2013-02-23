@@ -10,7 +10,6 @@ import com.hopkins.rocknrollracing.state.Weapon;
 import com.hopkins.rocknrollracing.state.race.BonusType;
 import com.hopkins.rocknrollracing.state.race.CarRaceItem;
 import com.hopkins.rocknrollracing.state.race.RaceState;
-import com.hopkins.rocknrollracing.state.track.Track;
 import com.hopkins.rocknrollracing.utils.ImageUtils;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -60,8 +59,8 @@ public class HudElement extends AppElement {
         track.renderCarPositions(g, 8, 8, rs);
         track.renderTrack(g, 8, 8, rs.getTrack());
         renderCharges(g, playerCar);
-        renderArmor(g, playerCar.Armor);
-        renderLaps(g, rs.NumLaps - playerCar.getLap());
+        renderArmor(g, playerCar.Armor.getAvailable());
+        renderLaps(g, playerCar.getLapsRemaining(rs));
         if (rs.PlayerPaused > 0) {
             renderPaused(g, ticks);
         } else {
@@ -76,9 +75,9 @@ public class HudElement extends AppElement {
         Drop drop = playerCar.getModel().getDrop();
         Boost boost = playerCar.getModel().getBoost();
         
-        renderCharge(g, 88, 9, weapon.ordinal(), playerCar.Charges[0]);
-        renderCharge(g, 121, 9, 3 + boost.ordinal(), playerCar.Charges[1]);
-        renderCharge(g, 152, 9, 5 + drop.ordinal(), playerCar.Charges[2]);
+        renderCharge(g, 88, 9, weapon.ordinal(), playerCar.Charges[0].getAvailable());
+        renderCharge(g, 121, 9, 3 + boost.ordinal(), playerCar.Charges[1].getAvailable());
+        renderCharge(g, 152, 9, 5 + drop.ordinal(), playerCar.Charges[2].getAvailable());
     }
     
     protected void renderCharge(Graphics g, int x, int y, int frame, int quantity) {

@@ -11,6 +11,6 @@ package com.hopkins.rocknrollracing.state;
 public enum ControllerButton {
     Unknown,
     Up, Right, Down, Left,
-    Gas, Fire, Drop, Boost,
+    Gas, Weapon, Drop, Boost,
     Pause
 }

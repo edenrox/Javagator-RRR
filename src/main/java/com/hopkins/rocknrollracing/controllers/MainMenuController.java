@@ -82,7 +82,7 @@ public class MainMenuController extends AppController {
                 this.gameState.NumPlayers = (choice + 1);
                 break;
             case 2:
-                this.gameState.Difficulty = Difficulty.All[choice];
+                this.gameState.GameDifficulty = Difficulty.All[choice];
                 break;
         }
     }

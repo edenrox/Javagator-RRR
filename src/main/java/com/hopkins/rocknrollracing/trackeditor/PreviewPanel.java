@@ -48,7 +48,7 @@ public class PreviewPanel extends JPanel {
     public void paint(Graphics g) {
         g.setColor(BACKGROUND_COLOR);
         g.fillRect(0, 0, getWidth(), getHeight());
-        renderer.renderPiece(g, 8, 8, type);
+        renderer.renderPiece(g, getWidth() / 2, 8, type);
     }
     
     

@@ -14,7 +14,7 @@ public class UpgradeState {
     public UpgradeState() {
         Levels = new int[] {
             0, 0, 0, 0,
-            0, 0, 0
+            1, 1, 1
         };
     }
     
@@ -23,5 +23,15 @@ public class UpgradeState {
     }
     public void incLevel(UpgradeType type) {
         Levels[type.ordinal()]++;
+    }
+    
+    public void setLevel(UpgradeType type, int level) {
+        Levels[type.ordinal()] = level;
+    }
+    
+    public void setLevels(UpgradeType[] types, int level) {
+        for(UpgradeType type : types) {
+            setLevel(type, level);
+        }
     }
 }

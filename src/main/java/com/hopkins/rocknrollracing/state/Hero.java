@@ -4,6 +4,8 @@
  */
 package com.hopkins.rocknrollracing.state;
 
+import com.hopkins.rocknrollracing.utils.ArrayUtils;
+
 /**
  *
  * @author ihopkins
@@ -24,6 +26,15 @@ public class Hero extends HasFaceAndPlanet {
     
     public CarAttribute[] getBonuses() {
         return bonuses;
+    }
+    
+    public boolean hasBonus(CarAttribute bType) {
+        for(CarAttribute bonus : bonuses) {
+            if (bonus == bType) {
+                return true;
+            }
+        }
+        return false;
     }
     
     public Hero(String name, Planet planet, CarAttribute[] bonuses) {

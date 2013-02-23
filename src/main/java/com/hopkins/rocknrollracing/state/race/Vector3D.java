@@ -17,6 +17,13 @@ public class Vector3D {
     public float Y;
     public float Z;
     
+    public Vector3D() {
+        set(0f, 0f, 0f);
+    }
+    public Vector3D(float x, float y, float z) {
+        set(x, y, z);
+    }
+    
     public float getMagnitude() {
         return (float) Math.sqrt(X * X + Y * Y + Z * Z);
     }
@@ -42,6 +49,12 @@ public class Vector3D {
         Z += toAdd.Z;
     }
     
+    public void subtract(Vector3D toSubtract) {
+        X -= toSubtract.X;
+        Y -= toSubtract.Y;
+        Z -= toSubtract.Z;
+    }
+    
     public void add(float quantity, int angle) {
         float dx = (float) (quantity * MathUtils.cos(angle));
         float dy = (float) (-quantity * MathUtils.sin(angle));
@@ -56,7 +69,7 @@ public class Vector3D {
         this.Z = that.Z;
     }
     
-    public void set(float x, float y, float z) {
+    public final void set(float x, float y, float z) {
         this.X = x;
         this.Y = y;
         this.Z = z;
@@ -69,4 +82,10 @@ public class Vector3D {
         }
         return angle;
     }
+
+    @Override
+    public String toString() {
+        return String.format("[%.2f, %.2f, %.2f]", X, Y, Z);
+    }
+
 }
