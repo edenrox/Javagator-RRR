@@ -30,7 +30,10 @@ public class RaceView extends AppView {
     public static final Color BACKGROUND_COLOR = new Color(112, 80, 8);
     public static final Color GRID_COLOR = new Color(72, 0, 0);
     public static final boolean DEBUG_ENABLED = false;
-    public static final float MAX_CAMERA_ACCEL = 0.02f;
+    public static final float MAX_CAMERA_LEAD_CHANGE = 0.01f;
+    public static final float MAX_CAMERA_LEAD = 1.5f;
+    
+    protected Vector3D prevCameraLead;
     
     @Inject
     protected HudElement hud;
@@ -64,9 +67,43 @@ public class RaceView extends AppView {
 
     @Override
     public void render(Graphics g, long ticks) {
+        CarRaceItem cri = RaceState.getCars().get(0);
+        Vector3D cameraPos = World.getCameraPosition(cri);
         
-        // Get the camera position
-        Vector3D cameraPos = getCameraPosition(RaceState.getCars().get(0));
+        // Handle the first frame
+        if (prevCameraLead == null) {
+            prevCameraLead = new Vector3D(0f, 0f, 0f);
+        }
+        
+        Vector3D cameraLead = new Vector3D();
+        
+        // Figure out the desired camera lead
+        int angle = cri.getVelocity().getAngle();
+        float magnitude = cri.getVelocity().getMagnitude() / cri.getTopSpeed() * MAX_CAMERA_LEAD;
+        cameraLead.add(magnitude, angle);
+        
+        Vector3D delta = new Vector3D();
+        delta.copy(cameraLead);
+        delta.subtract(prevCameraLead);
+        
+        // limit the magnitude of the camera lead change
+        if (delta.getMagnitude() > MAX_CAMERA_LEAD_CHANGE) {
+            delta.setMagnitude(MAX_CAMERA_LEAD_CHANGE);
+        }
+        
+        // Calulate the Actual Camera Lead
+        cameraLead.copy(prevCameraLead);
+        if (delta.getMagnitude() < 0.001f) {
+            delta.set(0f,0f,0f);
+        }
+        cameraLead.add(delta);
+        
+        // Save the Actual Camera Lead for next time
+        prevCameraLead.copy(cameraLead);
+        
+        // Add the lead to the camera position
+        cameraPos.add(cameraLead);
+        
         
         // Render the track
         renderTrack(g, cameraPos, ticks);

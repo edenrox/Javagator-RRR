@@ -166,7 +166,7 @@ public class CarRaceItem extends RaceItem {
     }
     
     public float getTopSpeed() {
-        return 0.05f + (0.01f * getMax(UpgradeType.Engine, CarAttribute.TopSpeed));
+        return 0.05f + (0.002f * getMax(UpgradeType.Engine, CarAttribute.TopSpeed));
     }
     
     public float getMaxAccel() {
