@@ -16,6 +16,11 @@ import java.awt.Graphics;
  */
 public abstract class SelectView extends ViewWithBackground {
     
+    public static final int PLANET_X_MIN = -62;
+    public static final int PLANET_X_MAX = 248;
+    public static final int PLANET_X_CENTER = 78;
+    public static final int PLANET_VELOCITY = 2;
+    
     @Inject
     protected PanelElement panel;
     
@@ -30,6 +35,10 @@ public abstract class SelectView extends ViewWithBackground {
     
     @Inject
     protected PlanetElement planet;
+    
+    protected int planetX = PLANET_X_CENTER;
+    protected int planetVelocity = 0;
+    protected Planet lastPlanet;
     
     @Override
     protected void renderBackground(Graphics g) {
@@ -54,6 +63,8 @@ public abstract class SelectView extends ViewWithBackground {
         fontSelect.renderText(g, 9, 196, getBottomText());
     }
     
+    public int Direction;
+    
     protected abstract String getBottomText();
     protected abstract String getHoverText();
     protected abstract HasFace getFace();
@@ -61,17 +72,43 @@ public abstract class SelectView extends ViewWithBackground {
 
     @Override
     protected void renderForeground(Graphics g, long ticks) {
-        int angle = (int) (((double) ticks / 15) % 24 * 15);
-        if (ticks % 60 == 0) {
-//            System.out.println(angle);
-        }
+        
+        // Calculate the angle of the planet
+        int angle = 360 - (int) (((double) ticks / 60) % 24 * 15);
+        
         // Render the face
         face.render(g, 13, 118, getFace());
         
+        // Calculate the planet position
+        Planet currentPlanet = getPlanet();
+        if (lastPlanet == null) {
+            lastPlanet = currentPlanet;
+        }
+        if ((currentPlanet != lastPlanet) && (planetVelocity == 0)) {
+            if (Direction > 0) {
+                planetVelocity = -PLANET_VELOCITY;
+            } else {
+                planetVelocity = PLANET_VELOCITY;
+            }
+        }
+        planetX += planetVelocity;
+        if (planetX < PLANET_X_MIN) {
+            lastPlanet = currentPlanet;
+            planetX = PLANET_X_MAX;
+        }
+        if (planetX > PLANET_X_MAX) {
+            lastPlanet = currentPlanet;
+            planetX = PLANET_X_MIN;
+        }
+        if ((planetX == PLANET_X_CENTER) && (lastPlanet == currentPlanet)) {
+            planetVelocity = 0;
+        }
         
+        
+        
+        // Render the planet (clipped to the viewport)
         g.clipRect(14, 6, 226, 98);
-        // Render the planet
-        planet.renderLarge(g, 80, 7, angle, getPlanet());
+        planet.renderLarge(g, planetX, 7, angle, lastPlanet);
         g.setClip(null);
         
         // Render the text

@@ -18,6 +18,8 @@ public class FontBasicElement extends AppElement {
     public static final char MAXIMUM = '_';
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
+    public static final char SPACE_CHAR = ' ';
+    public static final String NEWLINE_STRING = "\n";
     
     protected BufferedImage source;
     
@@ -26,10 +28,33 @@ public class FontBasicElement extends AppElement {
         source = ImageUtils.loadSprite(SPRITE_PATH);
     }
     
+    public static String wordWrap(String text, int maxWidth) {
+        StringBuilder sb = new StringBuilder();
+        
+        while (text.length() > maxWidth) {
+            // Find where we need to wrap the line
+            int pos = text.lastIndexOf(SPACE_CHAR, maxWidth);
+            if (pos < 0) {
+                pos = maxWidth;
+            }
+            
+            // wrap the line
+            sb.append(text.substring(0, pos+1));
+            sb.append(NEWLINE_STRING);
+            text = text.substring(pos+1);
+        }
+        if (text.length() > 0) {
+            sb.append(text);
+        }
+        
+        
+        return sb.toString();
+    }
+    
     public void renderText(Graphics g, int x, int y, String text) {
-        String lines[] = text.split("\n");
+        String lines[] = text.split(NEWLINE_STRING);
         int cy = y;
-        int cx = x;
+        int cx;
         for(String line : lines) {
             cx = x;
             for(char c : line.toCharArray()) {

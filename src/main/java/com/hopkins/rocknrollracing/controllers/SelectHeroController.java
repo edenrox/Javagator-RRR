@@ -32,8 +32,10 @@ public class SelectHeroController extends AppController {
     public void update(ControllerState input, long ticks) {
         if (input.isPressed(ControllerButton.Left)) {
             cursor--;
+            theView.Direction = -1;
         } else if (input.isPressed(ControllerButton.Right)) {
             cursor++;
+            theView.Direction = 1;
         } else if (input.isAnyButtonPressed()) {
             gameState.Player1.Hero = getHero();
             dispatchTo("CarPurchase");

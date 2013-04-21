@@ -4,18 +4,20 @@
  */
 package com.hopkins.rocknrollracing.state;
 
+import com.hopkins.rocknrollracing.utils.ArrayUtils;
+
 /**
  *
  * @author ian
  */
 public class Planet {
     
-    public static final Planet ChemVI = new Planet("Chem VI");
-    public static final Planet Drakonis = new Planet("Drakonis");
-    public static final Planet Bogmire = new Planet("Bogmire");
-    public static final Planet NewMojave = new Planet("New Mojave");
-    public static final Planet Nho = new Planet("Nho");
-    public static final Planet Inferno = new Planet("Inferno");
+    public static final Planet ChemVI = new Planet("Chem VI", 94, "Bring your gas mask to race on this smoggy, overcrowded world.");
+    public static final Planet Drakonis = new Planet("Drakonis", 110, "The locals here are very fond of humans ... for dinner.");
+    public static final Planet Bogmire = new Planet("Bogmire", 80, "The swampy domain of ragewortt, self proclaimed ruler of everything.");
+    public static final Planet NewMojave = new Planet("New Mojave", 115, "Prison planet of the galaxy, victory will not come easy here.");
+    public static final Planet Nho = new Planet("Nho", -20, "Cars need special care to race on this icy world.");
+    public static final Planet Inferno = new Planet("Inferno", 160, "The toughest planet in the federation. Watch out for lava pools.");
     
     public static final Planet Terra = new Planet("Terra");
     public static final Planet Serpentis = new Planet("Serpentis");
@@ -35,12 +37,28 @@ public class Planet {
     };
     
     protected String name;
+    protected String description;
+    protected int temperature;
     
     public String getName() {
         return name;
     }
+    public int getTemperature() {
+        return temperature;
+    }
+    public String getDescription() {
+        return description;
+    }
     
     public Planet(String name) {
         this.name = name;
+        this.temperature = 0;
+        this.description = "";
+    }
+    
+    public Planet(String name, int temperature, String description) {
+        this.name = name;
+        this.temperature = temperature;
+        this.description = description;
     }
 }
