@@ -5,8 +5,8 @@
 package com.hopkins.rocknrollracing.views;
 
 import com.hopkins.rocknrollracing.inject.Inject;
-import com.hopkins.rocknrollracing.state.PlayerState;
 import com.hopkins.rocknrollracing.state.NPC;
+import com.hopkins.rocknrollracing.state.PlayerState;
 import com.hopkins.rocknrollracing.state.Upgrade;
 import com.hopkins.rocknrollracing.state.UpgradePosition;
 import com.hopkins.rocknrollracing.state.UpgradeType;

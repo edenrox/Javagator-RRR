@@ -25,18 +25,13 @@ public class ColorSwap {
          * Configuration
          */
         
-        String inputFile = "images/cars/effects/explosion.png";
-        String outputFile = "C:/Users/Ian/Desktop/explosion.png";
+        String inputFile = "images/places/places.png";
+        String outputFile = "C:/Users/Ian/Desktop/places.png";
         
         String[] palleteConversion = new String[] {
             "000000 => B00000",
-            "003973 => F82800",
-            "085242 => F85800",
-            "215A10 => F88800",
-            "005A21 => F8B018",
-            "314E18 => F8D040",
-            "4F3500 => F8E860",
-            "600000 => F8F880"
+            "001084 => 98C8F8",
+            "08008C => 6888D8",
         };
         
         /***************
@@ -68,10 +63,9 @@ public class ColorSwap {
                 if ((color & 0xff000000) == 0) {
                     color = COLOR_TRANSPARENT.getRGB();
                 }
-                if (!translationTable.containsKey(color)) {
-                    throw new IllegalArgumentException(String.format("Unknown color in input image: %x", color));
+                if (translationTable.containsKey(color)) {
+                    color = translationTable.get(color);
                 }
-                color = translationTable.get(color);
                 outputImage.setRGB(x, y, color);
             }
         }
