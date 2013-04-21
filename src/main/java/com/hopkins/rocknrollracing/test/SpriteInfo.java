@@ -5,9 +5,7 @@ import com.hopkins.rocknrollracing.utils.ImageUtils;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 
@@ -23,8 +21,8 @@ public class SpriteInfo
     {
         
         Application app = new Application();
-        //BufferedImage img = ImageUtils.loadSprite("images/planets/.png");
-        BufferedImage img = ImageIO.read(new File("C:\\Users\\ian\\Desktop\\1.png"));
+        BufferedImage img = ImageUtils.loadSprite("images/cars/large/black.png");
+        //BufferedImage img = ImageIO.read(new File("C:\\Users\\ian\\Desktop\\1.png"));
         
         log.info(String.format("Image Size: %dx%d pixels",
                     img.getWidth(), img.getHeight()));

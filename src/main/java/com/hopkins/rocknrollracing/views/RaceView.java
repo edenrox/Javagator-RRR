@@ -151,7 +151,7 @@ public class RaceView extends AppView {
         for (c.Y = y_min; c.Y <= y_max; c.Y++) {
             for (c.X = x_min; c.X <= x_max; c.X++) {
                 TrackPiece piece = RaceState.getTrack().getPiece(c.X, c.Y);
-                if (piece.getType() != TrackPieceType.Empty) {
+                if (!piece.isEmpty()) {
                     Vector3D piecePos = World.fromMapPosition(c);
                     Coord sp = World.toScreenPosition(piecePos, cameraPos);
                     track.renderPiece(g, sp.X, sp.Y, piece.getType());

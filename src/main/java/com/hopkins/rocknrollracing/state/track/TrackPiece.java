@@ -43,4 +43,8 @@ public class TrackPiece {
             log.error(ex);
         }
     }
+    
+    public boolean isEmpty() {
+        return (type == TrackPieceType.Empty);
+    }
 }

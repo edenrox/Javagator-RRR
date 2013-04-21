@@ -73,6 +73,8 @@ public class PreRaceHelper {
         Vector3D position = World.fromMapPosition(start);
         UpgradeState rivalUS = gs.getRivalUpgradeState();
         
+        position.Y += 3.0f;
+        
         if (rs.getTrack().getPiece(start.X, start.Y).getType() == TrackPieceType.StartRight) {
             angle = 0;
             position.Y -= 1.5;
@@ -144,12 +146,24 @@ public class PreRaceHelper {
         }
     }
     
+    
     protected Vector3D findRandomTrackPosition(Track t) {
         Vector3D rv = new Vector3D();
+        boolean done = false;
         
-        rv.X = (float) Math.random() * 60;
-        rv.Y = (float) Math.random() * 60;
-        rv.Z = 0;
+        while (!done) {
+        
+            rv.X = (float) Math.random() * 48 + 6;
+            rv.Y = (float) Math.random() * 48 + 6;
+            rv.Z = 0;
+            
+            Coord mapPos = World.toMapPosition(rv);
+            if (!t.getPiece(mapPos.X, mapPos.Y).isEmpty()) {
+                done = true;
+            }
+        }
+        
+        
         
         return rv;
     }

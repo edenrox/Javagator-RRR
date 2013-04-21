@@ -50,7 +50,7 @@ public class BuyMenuElement extends AppElement {
 
             g.fillRect(mx+1, my+1, w, h);
             
-            SpriteRenderer.render(g, menuImage, x, y, w, h, i, false, false);
+            SpriteRenderer.render(g, menuImage, mx, my, w, h, i, false, false);
         }
         
         

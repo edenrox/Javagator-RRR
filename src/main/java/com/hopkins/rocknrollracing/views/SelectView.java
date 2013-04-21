@@ -68,8 +68,11 @@ public abstract class SelectView extends ViewWithBackground {
         // Render the face
         face.render(g, 13, 118, getFace());
         
+        
+        g.clipRect(14, 6, 226, 98);
         // Render the planet
         planet.renderLarge(g, 80, 7, angle, getPlanet());
+        g.setClip(null);
         
         // Render the text
         font.renderText(g, 88, 112, getHoverText());
