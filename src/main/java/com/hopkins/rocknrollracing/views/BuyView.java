@@ -40,6 +40,7 @@ public class BuyView extends ViewWithBackground {
     
     public static final int NUM_PLACES = 3;
     public static final int STOP_FRAME = 21;
+    public static final int MESSAGE_TIMER_MAX = 100;
     
     @Inject
     protected BuyCraneElement buyCrane;
@@ -74,11 +75,23 @@ public class BuyView extends ViewWithBackground {
     protected int cx = 85, cy = 0;
     protected int[] modelFrame;
     public static final int MAX_CY = 34;
+    protected int messageTimer = 0;
+    protected String message = "";
 
     @Override
     protected void loadView() throws Exception {
         modelFrame = new int[] {STOP_FRAME, STOP_FRAME, STOP_FRAME};
         hasGrabbed = false;
+    }
+    
+    public void setCantAfford() {
+        message = CANT_AFFORD_TEXT;
+        messageTimer = MESSAGE_TIMER_MAX;
+    }
+    
+    public void setCantExit() {
+        message = CANT_EXIT_TEXT;
+        messageTimer = MESSAGE_TIMER_MAX;
     }
     
     
@@ -116,11 +129,17 @@ public class BuyView extends ViewWithBackground {
     protected void renderForeground(Graphics g, long ticks) {
         
         // Text
-        CarModel selected = getSelected();
-        String text = String.format(TEXT_FORMAT,
-                StringUtils.formatNumber(playerState.Money),
-                selected.getName(),
-                StringUtils.formatNumber(selected.getPrice()));
+        String text = "";
+        if (messageTimer > 0) {
+            messageTimer--;
+            text = message;
+        } else {
+            CarModel selected = getSelected();
+            text = String.format(TEXT_FORMAT,
+                    StringUtils.formatNumber(playerState.Money),
+                    selected.getName(),
+                    StringUtils.formatNumber(selected.getPrice()));
+        }
         font.renderText(g, 104, 17, text);
         
         // Menu Highlight

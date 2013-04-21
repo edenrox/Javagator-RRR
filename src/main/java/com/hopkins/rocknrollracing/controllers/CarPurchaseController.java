@@ -76,6 +76,7 @@ public class CarPurchaseController extends AppController {
             theView.isSelected = true;
         } else {
             // display a message about not being able to afford this car
+            theView.setCantAfford();
         }
     }
     
