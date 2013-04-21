@@ -82,11 +82,10 @@ public class PlayerState {
     }
     
     public boolean canUpgrade(UpgradeType type) {
-        int level = Upgrades.getLevel(type);
         if (isAmmoUpgrade(type)) {
-            return (level < 6);
+            return (Upgrades.getCharges(type) < 7);
         } else {
-            return (level < 3);
+            return (Upgrades.getLevel(type) < 3);
         }
     }
     
