@@ -22,7 +22,7 @@ public class TrophyElement extends AppElement {
     public void load() throws Exception {
         trophies = new BufferedImage[3];
         for(int i = 0; i < trophies.length; i++) {
-            trophies[i] = ImageUtils.loadSprite(String.format(SPRITE_PATH, (i+1)));
+            trophies[i] = loadSprite(SPRITE_PATH, "" + (i+1));
         }
     }
     

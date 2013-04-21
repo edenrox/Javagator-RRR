@@ -14,4 +14,8 @@ public enum UpgradeType {
     
     public static UpgradeType[] Charges = new UpgradeType[] {Weapon, Boost, Drop};
     public static UpgradeType[] Parts = new UpgradeType[] {Armor, Engine, Shocks, Tires};
+    
+    public boolean isAmmo() {
+        return ((this == Weapon) || (this == Boost) || (this == Drop));
+    }
 }

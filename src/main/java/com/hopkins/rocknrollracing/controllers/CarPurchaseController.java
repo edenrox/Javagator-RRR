@@ -27,6 +27,7 @@ public class CarPurchaseController extends AppController {
         setView(theView);
         theView.modelOffset = getModelOffset();
         theView.playerState = gameState.Player1;
+        theView.colorIndex = gameState.Player1.Color.ordinal();
     }
     
     protected int getModelOffset() {

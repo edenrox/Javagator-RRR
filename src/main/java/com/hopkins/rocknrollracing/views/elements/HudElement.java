@@ -37,18 +37,14 @@ public class HudElement extends AppElement {
 
     @Override
     public void load() throws Exception {
-        charges = loadSprite("charges");
-        armor = loadSprite("armor");
+        charges = loadSprite(SPRITE_PATH, "charges");
+        armor = loadSprite(SPRITE_PATH, "armor");
         
         font = new FontBasicElement();
         font.load();
         
         track = new HudTrackElement();
         track.load();
-    }
-    
-    protected BufferedImage loadSprite(String name) throws Exception {
-        return ImageUtils.loadSprite(String.format(SPRITE_PATH, name));
     }
     
     

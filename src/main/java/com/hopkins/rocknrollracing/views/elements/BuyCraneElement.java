@@ -14,22 +14,16 @@ import java.awt.image.BufferedImage;
  */
 public class BuyCraneElement extends AppElement {
     
-    
-
     public static final String SPRITE_PATH = "images/buy/crane_%s.png";
     
     protected BufferedImage arms, bottom, rails, top;
     
     @Override
     public void load() throws Exception {
-        arms = loadSprite("arms");
-        bottom = loadSprite("bottom");
-        rails = loadSprite("rails");
-        top = loadSprite("top");
-    }
-    
-    protected BufferedImage loadSprite(String name) throws Exception {
-        return ImageUtils.loadSprite(String.format(SPRITE_PATH, name));
+        arms = loadSprite(SPRITE_PATH, "arms");
+        bottom = loadSprite(SPRITE_PATH, "bottom");
+        rails = loadSprite(SPRITE_PATH, "rails");
+        top = loadSprite(SPRITE_PATH, "top");
     }
     
     public void renderRails(Graphics g, int x, int y) {

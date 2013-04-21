@@ -6,14 +6,12 @@ package com.hopkins.rocknrollracing.views;
 
 import com.hopkins.rocknrollracing.inject.Inject;
 import com.hopkins.rocknrollracing.state.CarColor;
-import com.hopkins.rocknrollracing.state.CarModel;
 import com.hopkins.rocknrollracing.state.CarState;
 import com.hopkins.rocknrollracing.state.GameState;
 import com.hopkins.rocknrollracing.state.HasFace;
 import com.hopkins.rocknrollracing.utils.StringUtils;
 import com.hopkins.rocknrollracing.views.elements.*;
 import java.awt.Graphics;
-import java.text.DecimalFormat;
 
 /**
  *

@@ -31,17 +31,13 @@ public class BetweenChargesElement extends AppElement {
 
     @Override
     public void load() throws Exception {
-        barImage = loadSprite("bar");
-        weaponImage = loadSprite("weapon");
-        boostImage = loadSprite("boost");
-        dropImage = loadSprite("drop");
+        barImage = loadSprite(SPRITE_PATH, "bar");
+        weaponImage = loadSprite(SPRITE_PATH, "weapon");
+        boostImage = loadSprite(SPRITE_PATH, "boost");
+        dropImage = loadSprite(SPRITE_PATH, "drop");
         
         panelElement = new PanelElement();
         panelElement.load();
-    }
-    
-    protected BufferedImage loadSprite(String name) throws Exception {
-        return ImageUtils.loadSprite(String.format(SPRITE_PATH, name));
     }
     
     public void render(Graphics g, int x, int y, PlayerState ps) {
@@ -55,11 +51,11 @@ public class BetweenChargesElement extends AppElement {
         
         renderIcon(g, x+6, y+43, boostImage, ps.Model.getBoost().ordinal());
         
-        renderCharges(g, x+28, y+6, ps.Upgrades.getLevel(UpgradeType.Weapon) + 1);
+        renderCharges(g, x+28, y+6, ps.Upgrades.getCharges(UpgradeType.Weapon));
         
-        renderCharges(g, x+28, y+26, ps.Upgrades.getLevel(UpgradeType.Drop) + 1);
+        renderCharges(g, x+28, y+26, ps.Upgrades.getCharges(UpgradeType.Drop));
         
-        renderCharges(g, x+28, y+46, ps.Upgrades.getLevel(UpgradeType.Boost) + 1);
+        renderCharges(g, x+28, y+46, ps.Upgrades.getCharges(UpgradeType.Boost));
         
     }
     

@@ -20,12 +20,8 @@ public class PowerUpElement extends AppElement {
 
     @Override
     public void load() throws Exception {
-        money = loadSprite("money");
-        armor = loadSprite("armor");
-    }
-    
-    protected BufferedImage loadSprite(String name) throws Exception {
-        return ImageUtils.loadSprite(String.format(SPRITE_PATH, name));
+        money = loadSprite(SPRITE_PATH, "money");
+        armor = loadSprite(SPRITE_PATH, "armor");
     }
     
     public void renderPowerUp(Graphics g, int x, int y, PowerUp type) {

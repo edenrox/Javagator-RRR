@@ -125,10 +125,18 @@ public class UpgradeView extends AppView {
         
         for(int i = 0; i < positions.length; i++) {
             UpgradePosition pos = positions[i];
+            UpgradeType type = pos.getType();
+            int offset = getSpriteOffset(type);
             
-            int offset = getSpriteOffset(pos.getType());
-            upgradeElement.renderUpgradeIcon(g, pos.getX(), pos.getY(), pos.getType(), offset, (cp == i+1));
+            upgradeElement.renderUpgradeIcon(g, pos.getX(), pos.getY(), type, offset, (cp == i+1));
+            if (type.isAmmo()) {
+                upgradeElement.renderLevels(g, pos.getX(), pos.getY(), getCharges(type));
+            }
         }
+    }
+    
+    protected int getCharges(UpgradeType type) {
+        return playerState.Upgrades.getCharges(type);
     }
     
     protected int getSpriteOffset(UpgradeType type) {

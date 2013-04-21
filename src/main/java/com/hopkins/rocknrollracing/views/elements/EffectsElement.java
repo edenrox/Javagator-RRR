@@ -23,10 +23,10 @@ public class EffectsElement extends AppElement {
     
     @Override
     public void load() throws Exception {
-        smoke = ImageUtils.loadSprite(String.format(SPRITE_PATH, "smoke"));
-        explosion = ImageUtils.loadSprite(String.format(SPRITE_PATH, "explosion"));
-        nitro = ImageUtils.loadSprite(String.format(SPRITE_PATH, "nitro"));
-        parts = ImageUtils.loadSprite(String.format(SPRITE_PATH, "parts"));
+        smoke = loadSprite(SPRITE_PATH, "smoke");
+        explosion = loadSprite(SPRITE_PATH, "explosion");
+        nitro = loadSprite(SPRITE_PATH, "nitro");
+        parts = loadSprite(SPRITE_PATH, "parts");
     }
     
     public void renderSmoke(Graphics g, int x, int y, int frame) {

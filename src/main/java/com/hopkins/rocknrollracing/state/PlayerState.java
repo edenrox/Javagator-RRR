@@ -20,7 +20,7 @@ public class PlayerState {
     public UpgradeState Upgrades;
     
     public PlayerState() {
-        Color = CarColor.Blue;
+        Color = CarColor.Red;
         Model = CarModel.DirtDevil;
         Hero = Hero.Snake;
         Money = STARTING_MONEY;
@@ -44,6 +44,9 @@ public class PlayerState {
         }
         
         Upgrades = new UpgradeState();
+        Upgrades.setLevel(UpgradeType.Weapon, m.getWeapon().ordinal());
+        Upgrades.setLevel(UpgradeType.Boost, m.getBoost().ordinal());
+        Upgrades.setLevel(UpgradeType.Drop, m.getDrop().ordinal());
     }
     
     public void awardPlace(PodiumPlace place) {
@@ -59,13 +62,11 @@ public class PlayerState {
     }
     
     public Upgrade getNextUpgrade(UpgradeType type) {
-        int level = Upgrades.getLevel(type);
-        if (level < 3) {
-            return Upgrade.All[type.ordinal()][level+1];
-        } else {
-            // no upgrade available
-            return null;
+        int nextlevel = Upgrades.getLevel(type);
+        if (type.isAmmo()) {
+            nextlevel++;
         }
+        return Upgrade.All[type.ordinal()][nextlevel];
     }
     
     public boolean isAmmoUpgrade(UpgradeType type) {
@@ -95,6 +96,10 @@ public class PlayerState {
         if (!hasInfiniteMoney()) {
             Money -= next.getPrice();
         }
-        Upgrades.incLevel(type);
+        if (type.isAmmo()) {
+            Upgrades.incCharges(type);
+        } else {
+            Upgrades.incLevel(type);
+        }
     }
 }

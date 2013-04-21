@@ -25,16 +25,12 @@ public class WeaponElement extends AppElement {
 
     @Override
     public void load() throws Exception {
-        plasma = loadSprite("plasma");
-        missile = loadSprite("missile");
-        sundog = loadSprite("sundog");
-        oil = loadSprite("oil");
-        mine = loadSprite("mine");
-        scatterpack = loadSprite("scatterpack");
-    }
-    
-    protected BufferedImage loadSprite(String name) throws Exception {
-        return ImageUtils.loadSprite(String.format(SPRITE_PATH, name));
+        plasma = loadSprite(SPRITE_PATH, "plasma");
+        missile = loadSprite(SPRITE_PATH, "missile");
+        sundog = loadSprite(SPRITE_PATH, "sundog");
+        oil = loadSprite(SPRITE_PATH, "oil");
+        mine = loadSprite(SPRITE_PATH, "mine");
+        scatterpack = loadSprite(SPRITE_PATH, "scatterpack");
     }
     
     protected int getFrameFromAngle(int angleInDegrees) {

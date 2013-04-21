@@ -26,7 +26,7 @@ public class GameState {
         GameDifficulty = GameDifficulty.Rookie;
         Player1 = new PlayerState();
         NumPlayers = 1;
-        Mode = GameMode.Versus;
+        Mode = GameMode.Career;
         Rival = Rival.Viper;
         Division = Division.B;
         RaceNumber = 1;
@@ -72,7 +72,7 @@ public class GameState {
             charges += 2;
         }
         UpgradeState us = new UpgradeState();
-        us.setLevels(UpgradeType.Charges, charges);
+        us.setCharges(UpgradeType.Charges, charges);
         us.setLevels(UpgradeType.Parts, parts);
         return us;
     }

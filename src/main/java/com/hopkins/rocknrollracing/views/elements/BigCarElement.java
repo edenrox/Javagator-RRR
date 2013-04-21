@@ -69,7 +69,7 @@ public class BigCarElement extends AppElement {
             String path = StringUtils.nameToPath(model.getName());
             try {
                 // Load the source image
-                BufferedImage src = ImageUtils.loadSprite(String.format(SPRITE_PATH, path));
+                BufferedImage src = loadSprite(SPRITE_PATH, path);
                 
                 // build the color lookup table
                 int[] originColors = ColorSwapper.makeColorsOpaque(BlueColors);

@@ -39,13 +39,9 @@ public class HudTrackElement extends AppElement  {
     
     @Override
     public void load() throws Exception {
-        track = loadSprite("track");
-        colors = loadSprite("colors");
+        track = loadSprite(SPRITE_PATH, "track");
+        colors = loadSprite(SPRITE_PATH, "colors");
         scale = 1.0f;
-    }
-    
-    protected BufferedImage loadSprite(String name) throws Exception {
-        return ImageUtils.loadSprite(String.format(SPRITE_PATH, name));
     }
     
     public void renderCarPositions(Graphics g, int ox, int oy, RaceState rs) {

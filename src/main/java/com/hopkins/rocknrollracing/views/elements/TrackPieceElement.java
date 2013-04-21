@@ -16,8 +16,7 @@ import java.lang.reflect.Field;
  * @author ian
  */
 public class TrackPieceElement extends AppElement {
-    public static final String BASE_SPRITE_PATH = "images/track/%s.png";
-    public static final String PLANET_SPRITE_PATH = "images/track/%s/%s.png";
+    public static final String SPRITE_PATH = "images/track/%s.png";
     
     public static final int TILE_WIDTH = 32;
     public static final int TILE_HEIGHT = 8;
@@ -44,17 +43,13 @@ public class TrackPieceElement extends AppElement {
             };
         Class<?> clazz = this.getClass();
         for(String piece : pieces) {
-            BufferedImage bi = loadSprite(planet, piece);
+            BufferedImage bi = loadSprite(SPRITE_PATH, String.format("%s/%s", planet, piece));
             Field f = clazz.getDeclaredField(piece);
             f.setAccessible(true);
             f.set(this, bi);
         }
         
-        finishLine = ImageUtils.loadSprite(String.format(BASE_SPRITE_PATH, "finishLine"));
-    }
-    
-    protected BufferedImage loadSprite(String planet, String name) throws Exception {
-        return ImageUtils.loadSprite(String.format(PLANET_SPRITE_PATH, planet, name));
+        finishLine = loadSprite(SPRITE_PATH, "finishLine");
     }
     
     

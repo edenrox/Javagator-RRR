@@ -14,8 +14,7 @@ import java.awt.image.BufferedImage;
  */
 public class AdvancePlanetMenuElement extends AppElement {
     
-    public static final String EXIT_SPRITE_PATH = "images/advance/exit.png";
-    public static final String ADVANCE_SPRITE_PATH = "images/advance/advance.png";
+    public static final String SPRITE_PATH = "images/advance/%s.png";
     
     public static final int ITEM_WIDTH = 32;
     public static final int ITEM_HEIGHT = 24;
@@ -26,8 +25,8 @@ public class AdvancePlanetMenuElement extends AppElement {
     
     @Override
     public void load() throws Exception {
-        exit = ImageUtils.loadSprite(EXIT_SPRITE_PATH);
-        advance = ImageUtils.loadSprite(ADVANCE_SPRITE_PATH);
+        exit = loadSprite(SPRITE_PATH, "exit");
+        advance = loadSprite(SPRITE_PATH, "advance");
         lookup = new BufferedImage[] {exit, advance};
     }
     

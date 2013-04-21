@@ -48,9 +48,7 @@ public class CarElement extends AppElement {
         cars = new IndexedImage[numModels];
         for(int i = 0; i < numModels; i++) {
             String modelName = StringUtils.nameToPath(CarModel.All[i].getName());
-            BufferedImage carImage = ImageUtils.loadSprite(String.format(
-                    SPRITE_PATH,
-                    modelName));
+            BufferedImage carImage = loadSprite(SPRITE_PATH, modelName);
             
             cars[i] = new IndexedImage();
             cars[i].loadFromImage(carImage, ORIGIN_PALETTE);

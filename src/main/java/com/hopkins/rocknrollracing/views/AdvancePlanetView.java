@@ -5,6 +5,7 @@
 package com.hopkins.rocknrollracing.views;
 
 import com.hopkins.rocknrollracing.inject.Inject;
+import com.hopkins.rocknrollracing.state.Division;
 import com.hopkins.rocknrollracing.state.GameState;
 import com.hopkins.rocknrollracing.state.NPC;
 import com.hopkins.rocknrollracing.views.elements.*;
@@ -18,11 +19,21 @@ public class AdvancePlanetView extends ViewWithBackground {
     
     public static final String RETURN_TEXT = "Return to Menu";
     
+    public static final String CHARACTER_NAME = "Captain Braddock:";
+    
     public static final String CANT_ADVANCE = 
-            "Captain Braddock:\n\n" +
             "'You ain't earned\n" +
             "the right yet,\n" +
-            "rookie.";
+            "rookie.'";
+    
+    public static final String ADVANCE_PLANET = 
+            "'Sit down, strap\n" +
+            "in, and shut up.'";
+    
+    public static final String ADVANCE_TO_A = 
+            "So you think \n" +
+            "you're ready to\n" +
+            "race division A?";
     
     public static final String POINTS_FORMAT = 
             "Score Needed\n" +
@@ -43,6 +54,9 @@ public class AdvancePlanetView extends ViewWithBackground {
     @Inject
     protected AdvancePlanetMenuElement menu;
     
+    @Inject
+    protected ShipLaunchElement shipLaunch;
+    
     public GameState gameState;
     public int cursor;
 
@@ -53,6 +67,7 @@ public class AdvancePlanetView extends ViewWithBackground {
 
     @Override
     protected void renderBackground(Graphics g) {
+        gameState.Player1.Points = 3200;
         // Background
         panel.renderRedPanel(g, 0, 0, Screen.WIDTH, Screen.HEIGHT, 2);
         
@@ -75,7 +90,11 @@ public class AdvancePlanetView extends ViewWithBackground {
         // Braddock's Face
         face.render(g, 24, 16, NPC.Braddock);
         
+        // Render the ship
+        shipLaunch.renderShip(g, 148, 117, -1);
         
+        // Render the cradle
+        shipLaunch.renderCradle(g, 141, 149);
     }
 
     @Override
@@ -87,7 +106,14 @@ public class AdvancePlanetView extends ViewWithBackground {
         
         String text = RETURN_TEXT;
         if (cursor == 1) {
-            text = CANT_ADVANCE;
+            if (gameState.Player1.Points < gameState.Rival.getPointsRequired()) {
+                text = CANT_ADVANCE;
+            } else if (gameState.Division == Division.B) {
+                text = ADVANCE_TO_A;
+            } else {
+                text = ADVANCE_PLANET;
+            }
+            text = CHARACTER_NAME + "\n\n" + text;
         }
         font.renderText(g, 104, 24, text);
         

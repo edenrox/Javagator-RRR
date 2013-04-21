@@ -29,10 +29,8 @@ public class UpgradeElement extends AppElement {
         
         upgradeSprites = new BufferedImage[all.length];
         for(int i = 0; i < all.length; i++) {
-            upgradeSprites[i] = ImageUtils.loadSprite(String.format(SPRITE_PATH, all[i]));
+            upgradeSprites[i] = loadSprite(SPRITE_PATH, all[i].toString());
         }
-        
-        
     }
     
     public void renderUpgradeIcon(Graphics g, int x, int y, UpgradeType type, int offset, boolean isHighlighted) {
@@ -45,6 +43,17 @@ public class UpgradeElement extends AppElement {
         g.setColor(c);
         g.drawRect(x, y, WIDTH - 1, HEIGHT - 1);
         SpriteRenderer.render(g, upgradeSprites[spriteIndex], x, y, WIDTH, HEIGHT, offset, false, false);
+    }
+    
+    public void renderLevels(Graphics g, int x, int y, int level) {
+        int ox;
+        int oy = y + 26;
+    
+        g.setColor(MenuColors.Yellow);
+        for (int i = 0; i < level; i++) {
+            ox = x + 2 + i * 3;
+            g.fillRect(ox, oy, 2, 3);
+        }
     }
     
 }

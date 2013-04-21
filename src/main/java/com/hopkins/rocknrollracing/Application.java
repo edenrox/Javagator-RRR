@@ -27,7 +27,7 @@ public class Application implements Runnable {
     public static final long MS_PER_SECOND = 1000;
     public static final long DESIRED_FPS = 60;
     public static final long DESIRED_PERIOD_MS = MS_PER_SECOND / DESIRED_FPS;
-    public static final String INITIAL_CONTROLLER = "CarPurchase";
+    public static final String INITIAL_CONTROLLER = "BetweenRace";
     public static final String TITLE = "Rock 'n Roll Racing - Javagator Remake";
     public static final String ICON_SPRITE_PATH = "images/cars/marauder-blue.png";
     
