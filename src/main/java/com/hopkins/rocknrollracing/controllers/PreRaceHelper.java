@@ -10,6 +10,7 @@ import com.hopkins.rocknrollracing.state.Difficulty;
 import com.hopkins.rocknrollracing.state.Division;
 import com.hopkins.rocknrollracing.state.Drop;
 import com.hopkins.rocknrollracing.state.Enemy;
+import com.hopkins.rocknrollracing.state.GameMode;
 import com.hopkins.rocknrollracing.state.GameState;
 import com.hopkins.rocknrollracing.state.HasFace;
 import com.hopkins.rocknrollracing.state.PowerUp;
@@ -40,6 +41,7 @@ public class PreRaceHelper {
         RaceState rs = new RaceState(gs);
         
         rs.getGameState().RaceNumber = 16;
+        
         
         loadTrack(rs);
         calculateWayPoints(rs);

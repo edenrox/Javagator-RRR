@@ -39,6 +39,7 @@ public class BuyView extends ViewWithBackground {
     public static final String SPRITE_PATH = "images/buy/place.png";
     
     public static final int NUM_PLACES = 3;
+    public static final int STOP_FRAME = 21;
     
     @Inject
     protected BuyCraneElement buyCrane;
@@ -62,13 +63,22 @@ public class BuyView extends ViewWithBackground {
     protected BuyPlaceElement place;
     
     public int modelIndex;
+    public boolean isSelected;
+    public boolean isComplete;
     public int colorIndex;
     public int menuIndex;
     public int modelOffset;
     public PlayerState playerState;
+    
+    protected boolean hasGrabbed;
+    protected int cx = 85, cy = 0;
+    protected int[] modelFrame;
+    public static final int MAX_CY = 34;
 
     @Override
     protected void loadView() throws Exception {
+        modelFrame = new int[] {STOP_FRAME, STOP_FRAME, STOP_FRAME};
+        hasGrabbed = false;
     }
     
     
@@ -86,6 +96,9 @@ public class BuyView extends ViewWithBackground {
         
         // Main area
         panel.renderBlackInlayRed(g, 64, 86, 178, 122, 1);
+        
+        // Crane Rails
+        buyCrane.renderRails(g, 65, 87);
         
         // Menu buttons panel
         panel.renderBluePanel(g, 17, 80, 40, 136, 1);
@@ -110,32 +123,87 @@ public class BuyView extends ViewWithBackground {
                 StringUtils.formatNumber(selected.getPrice()));
         font.renderText(g, 104, 17, text);
         
+        // Menu Highlight
+        if (!isSelected) {
+            if ((ticks % 30) > 15) {
+                int x = 21;
+                int y = menu.getMenuY(87, menuIndex);
+                g.setColor(MenuColors.Yellow);
+                g.drawRect(x, y, 32, 16);
+            }
+        }
+        
+        // calculate the frame rotation
+        if (ticks % 8 == 0) {
+            for(int i = 0; i < 3; i++) {
+                if (modelFrame[i] != STOP_FRAME) {
+                    modelFrame[i] = (modelFrame[i] + 1) % 24;
+                } else if ((i == modelIndex) && (!isSelected)) {
+                    modelFrame[i] = (modelFrame[i] + 1) % 24;
+                }
+            }
+        }
+        
+        
+        // calculate crane position and arm position
+        int desiredCx = 85 + modelIndex * 56;
+        BuyCraneElement.ArmPosition armPos = BuyCraneElement.ArmPosition.Closed;
+        
+        // animate the crane
+        if (ticks % 4 == 0) {
+            if ((hasGrabbed) && (cy == 0)) {
+                cx += 2;
+            } else if (desiredCx > cx) {
+                cx += 2;
+            } else if (desiredCx < cx) {
+                cx -= 2;
+            } else if ((isSelected) && (modelFrame[modelIndex] == STOP_FRAME)) {
+                if (!hasGrabbed) {
+                    cy += 2;
+                } else if (cy > 0) {
+                    cy -= 2;
+                }
+            }
+        }
+        if (cy == MAX_CY) {
+            hasGrabbed = true;
+            armPos = BuyCraneElement.ArmPosition.Gripping;
+        } else if (!hasGrabbed) {
+            if (cy >= MAX_CY - 4) {
+                armPos = BuyCraneElement.ArmPosition.Open;
+            } else if (cy >= MAX_CY - 8) {
+                armPos = BuyCraneElement.ArmPosition.Gripping;
+            }
+        }
+        if (hasGrabbed) {
+            armPos = BuyCraneElement.ArmPosition.Gripping;
+            if (cx > Screen.WIDTH) {
+                isComplete = true;
+            }
+        }
+        
+        g.clipRect(65, 87, 176, 120);
+        buyCrane.renderArmBehind(g, cx, 87, cy, armPos);
+        
         // Cars
         CarState cs = new CarState();
         cs.color = CarColor.All[colorIndex];
-        cs.y = 149;
         for (int i = 0; i < NUM_PLACES; i++) {
-            if (i == modelIndex) {
-                cs.frame = (int)((ticks % 180 * 24) / 180);
-            } else {
-                cs.frame = 21;
-            }
+            cs.y = 149;
+            cs.frame = modelFrame[i];
             cs.x = 73 + i * 56;
+            if ((i == modelIndex) && (hasGrabbed)) {
+                cs.x += (cx - desiredCx);
+                cs.y -= (MAX_CY - cy);
+            }
             cs.model = getModel(i);
             carElement.render(g, cs);
         }
         
-        // Menu Highlight
-        if ((ticks % 30) > 15) {
-            int x = 21;
-            int y = menu.getMenuY(87, menuIndex);
-            g.setColor(MenuColors.Yellow);
-            g.drawRect(x, y, 32, 16);
-        }
+        // Buy crane
+        buyCrane.renderCrane(g, cx, 87, cy, armPos);
+        g.setClip(null);
         
-        // Crane
-        int cx = 80 + modelIndex * 56;
-        buyCrane.render(g, cx, 89);
     }
     
     public CarModel getSelected() {

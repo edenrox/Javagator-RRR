@@ -26,7 +26,7 @@ public class GameState {
         GameDifficulty = GameDifficulty.Rookie;
         Player1 = new PlayerState();
         NumPlayers = 1;
-        Mode = GameMode.Career;
+        Mode = GameMode.Versus;
         Rival = Rival.Viper;
         Division = Division.B;
         RaceNumber = 1;

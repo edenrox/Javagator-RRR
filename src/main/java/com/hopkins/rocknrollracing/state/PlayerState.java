@@ -10,6 +10,7 @@ package com.hopkins.rocknrollracing.state;
  */
 public class PlayerState {
     public static final int STARTING_MONEY = 200000;
+    public static final int INFINITE_MONEY = Integer.MAX_VALUE;
     
     public CarColor Color;
     public CarModel Model;
@@ -27,20 +28,28 @@ public class PlayerState {
         Upgrades = new UpgradeState();
     }
     
+    public boolean hasInfiniteMoney() {
+        return (Money == INFINITE_MONEY);
+    }
+    
     public boolean canAfford(CarModel m) {
-        return (Money >= m.getPrice());
+        return (hasInfiniteMoney()) || (Money >= m.getPrice());
     }
     
     public void buyCar(CarModel m, CarColor color) {
         Color = color;
         Model = m;
-        Money -= m.getPrice();
+        if (!hasInfiniteMoney()) {
+            Money -= m.getPrice();
+        }
         
         Upgrades = new UpgradeState();
     }
     
     public void awardPlace(PodiumPlace place) {
-        Money += place.getPrizeMoney();
+        if (Money != INFINITE_MONEY) {
+            Money += place.getPrizeMoney();
+        }
         Points += place.getPoints();
     }
     
@@ -83,7 +92,9 @@ public class PlayerState {
     public void buyUpgrade(UpgradeType type) {
         Upgrade next = getNextUpgrade(type);
         
-        Money -= next.getPrice();
+        if (!hasInfiniteMoney()) {
+            Money -= next.getPrice();
+        }
         Upgrades.incLevel(type);
     }
 }
