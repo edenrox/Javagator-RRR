@@ -67,7 +67,6 @@ public class AdvancePlanetView extends ViewWithBackground {
 
     @Override
     protected void renderBackground(Graphics g) {
-        gameState.Player1.Points = 3200;
         // Background
         panel.renderRedPanel(g, 0, 0, Screen.WIDTH, Screen.HEIGHT, 2);
         
