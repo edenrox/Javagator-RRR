@@ -5,7 +5,6 @@
 package com.hopkins.rocknrollracing.views.elements;
 
 import com.hopkins.rocknrollracing.state.UpgradeType;
-import com.hopkins.rocknrollracing.utils.ImageUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -20,6 +19,9 @@ public class UpgradeElement extends AppElement {
     public static final int HEIGHT = 32;
 
     public static final String SPRITE_PATH = "images/upgrades/%s.png";
+    
+    public static final Color LEVEL_COLOR = new Color(200, 168, 0);
+    public static final Color LEVEL_COLOR_MAX = new Color(248, 184, 0);
     
     protected BufferedImage[] upgradeSprites;
     
@@ -49,7 +51,11 @@ public class UpgradeElement extends AppElement {
         int ox;
         int oy = y + 26;
     
-        g.setColor(MenuColors.Yellow);
+        if (level < 7) {
+            g.setColor(LEVEL_COLOR);
+        } else {
+            g.setColor(LEVEL_COLOR_MAX);
+        }
         for (int i = 0; i < level; i++) {
             ox = x + 2 + i * 3;
             g.fillRect(ox, oy, 2, 3);

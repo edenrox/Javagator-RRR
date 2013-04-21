@@ -7,7 +7,6 @@ package com.hopkins.rocknrollracing.controllers;
 import com.hopkins.rocknrollracing.inject.Inject;
 import com.hopkins.rocknrollracing.state.ControllerButton;
 import com.hopkins.rocknrollracing.state.ControllerState;
-import com.hopkins.rocknrollracing.state.Division;
 import com.hopkins.rocknrollracing.utils.MathUtils;
 import com.hopkins.rocknrollracing.views.AdvancePlanetView;
 

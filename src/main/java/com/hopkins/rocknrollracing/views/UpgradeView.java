@@ -33,14 +33,15 @@ public class UpgradeView extends AppView {
     public static final String HOVER_TEXT = 
             "Money: $%s\n\n" +
             "%s\n\n";
-    public static final String UPGRADE_TEXT = 
-            "Upgrade:\n" +
+    public static final String UPGRADE_FORMAT = 
             "%s\n" +
             "$%s\n";
+    public static final String NON_AMMO_TEXT =
+            "Upgrade:\n";
     public static final String AMMO_TEXT = 
-            "Ammunition:\n" +
-            "%s\n" +
-            "$%s\n";
+            "Ammunition:\n";
+    public static final String NONE_AVAILABLE =
+            "None Available";
     
     public static final UpgradePosition EXIT_POSITION = new UpgradePosition(19, 89, UpgradeType.Armor);
     
@@ -103,17 +104,24 @@ public class UpgradeView extends AppView {
                     StringUtils.formatNumber(playerState.Money),
                     current.getName()
                     );
+            if (isAmmo) {
+                text += AMMO_TEXT;
+            } else {
+                text += NON_AMMO_TEXT;
+            }
             if (playerState.canUpgrade(type)) {
                 if (isAmmo) {
-                    text += String.format(AMMO_TEXT,
+                    text += String.format(UPGRADE_FORMAT,
                             current.getSingle(),
                             StringUtils.formatNumber(current.getPrice()));
                 } else {
                     Upgrade upgrade = playerState.getNextUpgrade(type);
-                    text += String.format(UPGRADE_TEXT,
+                    text += String.format(UPGRADE_FORMAT,
                             upgrade.getName(),
                             StringUtils.formatNumber(upgrade.getPrice()));
                 }
+            } else {
+                text += NONE_AVAILABLE;
             }
         }
         fontElement.renderText(g, 104, 16, text);

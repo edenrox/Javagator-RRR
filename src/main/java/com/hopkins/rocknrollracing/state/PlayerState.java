@@ -63,7 +63,7 @@ public class PlayerState {
     
     public Upgrade getNextUpgrade(UpgradeType type) {
         int nextlevel = Upgrades.getLevel(type);
-        if (type.isAmmo()) {
+        if (!type.isAmmo()) {
             nextlevel++;
         }
         return Upgrade.All[type.ordinal()][nextlevel];
