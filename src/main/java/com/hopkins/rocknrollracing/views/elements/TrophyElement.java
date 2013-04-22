@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
  */
 public class TrophyElement extends AppElement {
     
-    public static final String SPRITE_PATH = "images/trophies/%d.png";
+    public static final String SPRITE_PATH = "images/trophies/%s.png";
     
     protected BufferedImage trophies[];
 
