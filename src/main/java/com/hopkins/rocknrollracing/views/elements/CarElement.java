@@ -93,13 +93,75 @@ public class CarElement extends AppElement {
         }
     }
     
-    protected void colorizeCar(CarState cs) {
-        int angleIndex = cs.frame;
-        if (cs.isHFlip()) {
-            angleIndex = 24 - cs.frame;
+    protected int getPitchOffset(int pitch) {
+        switch (pitch) {
+            case -2:
+                return 0;
+            case -1:
+                return 1;
+            case 1:
+                return 2;
+            case 2:
+                return 3;
+            default:
+                return 0;
         }
+    }
+    
+    protected int getApproxAngleOffset(int frame) {
+        switch (frame) {
+            case 0:
+            case 1:
+            case 2:
+                return 3;
+            case 3:
+                return 2;
+            case 4:
+                return 1;
+            case 5:
+            case 6:
+                return 0;
+            case 7:
+                return 7;
+            case 8:
+                return 6;
+            case 9:
+                return 5;
+            case 10:
+            case 11:
+            case 12:
+            default:
+                return 4;
+            
+        }
+    }
+    
+    protected int getFrameIndex(CarState cs) {
+        int angleOffset = 0;
+        int pitchOffset = 0;
+        int frame = cs.frame;
+        
+        if (cs.isHFlip()) {
+            frame = 24 - frame;
+        }
+        
+        if (cs.pitch == 0) {
+            // The car is not pitched up or down
+            angleOffset = frame;
+            return angleOffset;
+        } else {
+            pitchOffset = getPitchOffset(cs.pitch);
+            angleOffset = getApproxAngleOffset(frame);
+            
+            return 13 + angleOffset * 4 + pitchOffset;
+        }
+    }
+    
+    protected void colorizeCar(CarState cs) {
+        int frameIndex = getFrameIndex(cs);
+        
         int carIndex = ArrayUtils.indexOfObject(CarModel.All, cs.model);
-        cars[carIndex].render(palette, paletteBufferPixels, angleIndex * WIDTH * HEIGHT, WIDTH * HEIGHT);
+        cars[carIndex].render(palette, paletteBufferPixels, frameIndex * WIDTH * HEIGHT, WIDTH * HEIGHT);
     }
     
     protected void renderColorizedCar(Graphics g, CarState cs) {

@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
@@ -24,7 +25,7 @@ import org.json.simple.parser.JSONParser;
  */
 public class TrackSheet {
     
-    public static final int NUM_TRACKS = 31;
+    public static final int NUM_TRACKS = 1;
     public static final int IMAGE_WIDTH = 3000;
     public static final int IMAGE_HEIGHT = 800;
     
@@ -71,7 +72,8 @@ public class TrackSheet {
         Track t = new Track();
         JSONParser parser = new JSONParser();
         
-        InputStream is = t.getClass().getClassLoader().getResourceAsStream(String.format("tracks/%d.json", i));
+        //InputStream is = t.getClass().getClassLoader().getResourceAsStream(String.format("tracks/%d.json", i));
+        InputStream is = new FileInputStream(new File("c:/Users/Ian/Desktop/test.json"));
         JSONObject obj = (JSONObject) parser.parse(new InputStreamReader(is));
         t.fromJSON(obj);
         

@@ -16,6 +16,7 @@ public class CarState  {
     public int z;
     public int trackZ;
     public int frame;
+    public int pitch;
     public CarColor color;
     public CarModel model;
     public int wheelPosition;

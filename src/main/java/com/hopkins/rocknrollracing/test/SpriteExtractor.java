@@ -90,22 +90,16 @@ public class SpriteExtractor {
         
         dis.skip(SPRITE_OFFSET_IN_ROM);
         
-        int sheetWidth = 48 * 8;
-        int sheetHeight = 48 * 6;
+        int sheetWidth = 48;
+        int sheetHeight = 48 * 45;
         int numFlatFrames = 13;
         int numFrames = numFlatFrames + 32;
         
         BufferedImage bi = new BufferedImage(sheetWidth, sheetHeight, BufferedImage.TYPE_INT_ARGB);
         for (int carIndex = 0; carIndex < 5; carIndex++) {
+            int fx = 0;
+            int fy = 0;
             for (int frameIndex = 0; frameIndex < numFrames; frameIndex++) {
-                int fx, fy;
-                if (frameIndex < numFlatFrames) {
-                    fx = frameIndex % 8;
-                    fy = frameIndex / 8;
-                } else {
-                    fx = (frameIndex - numFlatFrames) % 8;
-                    fy = (frameIndex - numFlatFrames) / 8 + 2;
-                }
                 System.out.println(String.format("%d,%d", fx, fy));
                 for (int y = 0; y < 6; y++) {
                     for (int x = 0; x < 6; x++) {
@@ -113,6 +107,7 @@ public class SpriteExtractor {
                         renderTile(bi, fx * 6 + x, fy * 6 + y, tile);
                     }
                 }
+                fy++;
             }
             ImageIO.write(bi, "PNG", new File(String.format("sheet-%03d.png", carIndex)));
         }
