@@ -25,4 +25,8 @@ public enum TrackPieceType {
     public boolean isStart() {
         return (this == StartUp) || (this == StartRight);
     }
+    
+    public boolean isMultiHeight() {
+        return (this == StraightUp) || (this == StraightRight);
+    }
 }

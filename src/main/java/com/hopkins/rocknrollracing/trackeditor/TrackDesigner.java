@@ -11,11 +11,12 @@
 package com.hopkins.rocknrollracing.trackeditor;
 
 
-import com.hopkins.rocknrollracing.state.track.TrackPiece;
 import com.hopkins.rocknrollracing.state.track.Track;
+import com.hopkins.rocknrollracing.state.track.TrackPiece;
 import com.hopkins.rocknrollracing.state.track.TrackPieceType;
 import com.hopkins.rocknrollracing.trackeditor.TrackPanel.TileClickEvent;
 import com.hopkins.rocknrollracing.views.elements.HudTrackElement;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -26,6 +27,7 @@ import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JSlider;
 import javax.swing.filechooser.FileFilter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -65,6 +67,8 @@ public class TrackDesigner extends javax.swing.JFrame {
                 onTileClick(event);
             }
         });
+        
+        setPieceHeight(getCurrentPiece());
         
         preview = new PreviewPanel();
         jPanel4.add(preview);
@@ -131,6 +135,19 @@ public class TrackDesigner extends javax.swing.JFrame {
         toolInspect = new javax.swing.JToggleButton();
         jLabel7 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
+        heightPanel = new javax.swing.JPanel();
+        jSlider2 = new javax.swing.JSlider();
+        jSlider1 = new javax.swing.JSlider();
+        jSlider3 = new javax.swing.JSlider();
+        jSlider4 = new javax.swing.JSlider();
+        jSlider5 = new javax.swing.JSlider();
+        jSlider6 = new javax.swing.JSlider();
+        jSlider7 = new javax.swing.JSlider();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
+        jComboBox2 = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -344,6 +361,150 @@ public class TrackDesigner extends javax.swing.JFrame {
         jPanel4.setPreferredSize(new java.awt.Dimension(432, 128));
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
+        jSlider2.setMajorTickSpacing(1);
+        jSlider2.setMaximum(4);
+        jSlider2.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider2.setPaintTicks(true);
+        jSlider2.setSnapToTicks(true);
+        jSlider2.setValue(2);
+        jSlider2.setMaximumSize(new java.awt.Dimension(25, 23));
+        jSlider2.setName("1"); // NOI18N
+        jSlider2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                heightChanged(evt);
+            }
+        });
+
+        jSlider1.setMajorTickSpacing(1);
+        jSlider1.setMaximum(4);
+        jSlider1.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider1.setPaintTicks(true);
+        jSlider1.setSnapToTicks(true);
+        jSlider1.setValue(2);
+        jSlider1.setMaximumSize(new java.awt.Dimension(25, 23));
+        jSlider1.setName("0"); // NOI18N
+        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                heightChanged(evt);
+            }
+        });
+
+        jSlider3.setMajorTickSpacing(1);
+        jSlider3.setMaximum(4);
+        jSlider3.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider3.setPaintTicks(true);
+        jSlider3.setSnapToTicks(true);
+        jSlider3.setValue(2);
+        jSlider3.setMaximumSize(new java.awt.Dimension(25, 23));
+        jSlider3.setName("2"); // NOI18N
+        jSlider3.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                heightChanged(evt);
+            }
+        });
+
+        jSlider4.setMajorTickSpacing(1);
+        jSlider4.setMaximum(4);
+        jSlider4.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider4.setPaintTicks(true);
+        jSlider4.setSnapToTicks(true);
+        jSlider4.setValue(2);
+        jSlider4.setMaximumSize(new java.awt.Dimension(25, 23));
+        jSlider4.setName("3"); // NOI18N
+        jSlider4.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                heightChanged(evt);
+            }
+        });
+
+        jSlider5.setMajorTickSpacing(1);
+        jSlider5.setMaximum(4);
+        jSlider5.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider5.setPaintTicks(true);
+        jSlider5.setSnapToTicks(true);
+        jSlider5.setValue(2);
+        jSlider5.setMaximumSize(new java.awt.Dimension(25, 23));
+        jSlider5.setName("4"); // NOI18N
+        jSlider5.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                heightChanged(evt);
+            }
+        });
+
+        jSlider6.setMajorTickSpacing(1);
+        jSlider6.setMaximum(4);
+        jSlider6.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider6.setPaintTicks(true);
+        jSlider6.setSnapToTicks(true);
+        jSlider6.setValue(2);
+        jSlider6.setMaximumSize(new java.awt.Dimension(25, 23));
+        jSlider6.setName("5"); // NOI18N
+        jSlider6.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                heightChanged(evt);
+            }
+        });
+
+        jSlider7.setMajorTickSpacing(1);
+        jSlider7.setMaximum(4);
+        jSlider7.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider7.setPaintTicks(true);
+        jSlider7.setSnapToTicks(true);
+        jSlider7.setValue(2);
+        jSlider7.setMaximumSize(new java.awt.Dimension(25, 23));
+        jSlider7.setName("6"); // NOI18N
+        jSlider7.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                heightChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout heightPanelLayout = new javax.swing.GroupLayout(heightPanel);
+        heightPanel.setLayout(heightPanelLayout);
+        heightPanelLayout.setHorizontalGroup(
+            heightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(heightPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSlider4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSlider5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSlider6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSlider7, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        heightPanelLayout.setVerticalGroup(
+            heightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(heightPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(heightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSlider7, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider6, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider4, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel4.setText("Obstacle");
+
+        jLabel8.setText("Type:");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "Arrow Forward", "Arrow Backward", "Puddle" }));
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Top", "Center", "Bottom" }));
+
+        jLabel9.setText("Position:");
+
         jMenu1.setText("File");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
@@ -406,27 +567,42 @@ public class TrackDesigner extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(heightPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel1)
+                                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel4))
+                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel2))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel6)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -441,7 +617,9 @@ public class TrackDesigner extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel4))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
@@ -450,12 +628,22 @@ public class TrackDesigner extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(85, 85, 85)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(heightPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -573,6 +761,24 @@ public class TrackDesigner extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_onPieceChange
 
+    private void heightChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_heightChanged
+        JSlider slider = (JSlider) evt.getSource();
+        TrackPiece p = getCurrentPiece();
+        int value = slider.getValue();
+        int index = Integer.parseInt(slider.getName());
+        if (p.getType().isMultiHeight()) {
+            p.setHeight(index, value);
+        } else {
+            p.setHeightAll(value);
+            setPieceHeight(p);
+        }
+        
+    }//GEN-LAST:event_heightChanged
+
+    private TrackPiece getCurrentPiece() {
+        return track.getPiece(minimap.getSelectedTile().x, minimap.getSelectedTile().y);
+    }
+    
     private ToolType getToolType() {
         if (toolPaint.isSelected()) {
             return ToolType.Paint;
@@ -591,16 +797,25 @@ public class TrackDesigner extends javax.swing.JFrame {
         preview.setType(getPieceType());
     }
     
+    private void setPieceHeight(TrackPiece piece) {
+        int max = heightPanel.getComponentCount();
+        for(int i = 0; i < max; i++) {
+            JSlider slider = (JSlider) heightPanel.getComponent(i);
+            slider.setValue(piece.getHeight(i));
+        }
+    }
+    
     private void onTileClick(TrackPanel.TileClickEvent evt) {
         switch (getToolType()) {
             case Paint:
                 // set the piece
-                track.getPiece(evt.getTile().x, evt.getTile().y).setType(getPieceType());
+                getCurrentPiece().setType(getPieceType());
                 break;
             case Inspect:
                 // load the piece
-                TrackPieceType type = track.getPiece(evt.getTile().x, evt.getTile().y).getType();
-                setPieceType(type);
+                TrackPiece piece = getCurrentPiece();
+                setPieceType(piece.getType());
+                setPieceHeight(piece);
                 break;
         }
     }
@@ -644,12 +859,18 @@ public class TrackDesigner extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileDialog;
+    private javax.swing.JPanel heightPanel;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -664,6 +885,13 @@ public class TrackDesigner extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JSlider jSlider1;
+    private javax.swing.JSlider jSlider2;
+    private javax.swing.JSlider jSlider3;
+    private javax.swing.JSlider jSlider4;
+    private javax.swing.JSlider jSlider5;
+    private javax.swing.JSlider jSlider6;
+    private javax.swing.JSlider jSlider7;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton10;
     private javax.swing.JToggleButton jToggleButton11;

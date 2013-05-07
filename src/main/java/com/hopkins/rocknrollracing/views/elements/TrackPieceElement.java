@@ -5,7 +5,6 @@
 package com.hopkins.rocknrollracing.views.elements;
 
 import com.hopkins.rocknrollracing.state.track.TrackPieceType;
-import com.hopkins.rocknrollracing.utils.ImageUtils;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
