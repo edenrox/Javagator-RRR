@@ -17,6 +17,7 @@ import com.hopkins.rocknrollracing.views.elements.TrackTileRenderer;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 import org.json.simple.JSONObject;
@@ -33,7 +34,9 @@ public class TrackPieceRendererTest {
         Track rv = new Track();
         
         // Open the track file
-        InputStreamReader isr = new InputStreamReader(TrackPieceRendererTest.class.getClassLoader().getResourceAsStream("tracks/1.json"));
+        String filename = String.format("tracks/%d.json", number);
+        InputStream is = TrackPieceRendererTest.class.getClassLoader().getResourceAsStream(filename);
+        InputStreamReader isr = new InputStreamReader(is);
         // Read the track data
         JSONObject jsonTrack = (JSONObject) JSONValue.parse(isr);
         // Parse the track data
@@ -54,7 +57,7 @@ public class TrackPieceRendererTest {
         
         
         
-        Track t = loadTrack(1);
+        Track t = loadTrack(2);
         
         TrackPieceTiler tiler = new TrackPieceTiler(t, fg, bg);
         

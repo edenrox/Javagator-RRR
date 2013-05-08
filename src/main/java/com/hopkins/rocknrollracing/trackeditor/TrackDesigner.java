@@ -28,6 +28,7 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -89,6 +90,7 @@ public class TrackDesigner extends javax.swing.JFrame {
                 return "JSON Track Files (*.json)";
             }
         });
+        fileDialog.setCurrentDirectory(new File("C:/workspace/Icadev/Javagator-RRR/src/main/resources/tracks"));
     }
 
     /** This method is called from within the constructor to
@@ -374,6 +376,11 @@ public class TrackDesigner extends javax.swing.JFrame {
                 heightChanged(evt);
             }
         });
+        jSlider2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                heightKeyPressed(evt);
+            }
+        });
 
         jSlider1.setMajorTickSpacing(1);
         jSlider1.setMaximum(4);
@@ -388,6 +395,11 @@ public class TrackDesigner extends javax.swing.JFrame {
                 heightChanged(evt);
             }
         });
+        jSlider1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                heightKeyPressed(evt);
+            }
+        });
 
         jSlider3.setMajorTickSpacing(1);
         jSlider3.setMaximum(4);
@@ -400,6 +412,11 @@ public class TrackDesigner extends javax.swing.JFrame {
         jSlider3.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 heightChanged(evt);
+            }
+        });
+        jSlider3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                heightKeyPressed(evt);
             }
         });
 
@@ -574,7 +591,7 @@ public class TrackDesigner extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(heightPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(heightPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel1)
@@ -766,6 +783,7 @@ public class TrackDesigner extends javax.swing.JFrame {
         TrackPiece p = getCurrentPiece();
         int value = slider.getValue();
         int index = Integer.parseInt(slider.getName());
+        
         if (p.getType().isMultiHeight()) {
             p.setHeight(index, value);
         } else {
@@ -774,6 +792,17 @@ public class TrackDesigner extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_heightChanged
+
+    private void heightKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_heightKeyPressed
+        JSlider slider = (JSlider) evt.getSource();
+        TrackPiece p = getCurrentPiece();
+        int value = slider.getValue();
+        int index = Integer.parseInt(slider.getName());
+        if (evt.getKeyChar() == ' ') {
+            p.setHeightAll(value);
+            setPieceHeight(p);
+        }
+    }//GEN-LAST:event_heightKeyPressed
 
     private TrackPiece getCurrentPiece() {
         return track.getPiece(minimap.getSelectedTile().x, minimap.getSelectedTile().y);

@@ -125,21 +125,59 @@ public class TrackPieceTiler {
         }
     }
     
+    protected int getSlope(int a, int b) {
+        TrackPiece prev = null, next = null;
+        int ha = 0, hb = 0;
+        
+        switch (curPiece.getType()) {
+            case StartUp:
+            case StraightUp:
+            case JumpUp:
+            case JumpDown:
+                prev = track.getPiece(tx, ty + 1);
+                next = track.getPiece(tx, ty - 1);
+                break;
+            case StartRight:
+            case StraightRight:
+            case JumpRight:
+            case JumpLeft:
+                prev = track.getPiece(tx - 1, ty);
+                next = track.getPiece(tx + 1, ty);
+                break;
+        }
+        if (a == -1) {
+            ha = prev.getHeight(5);
+        } else if (a == 7) {
+            ha = next.getHeight(1);
+        } else {
+            ha = curPiece.getHeight(a);
+        }
+        if (a == -1) {
+            hb = prev.getHeight(5);
+        } else if (b == 7) {
+            hb = next.getHeight(1);
+        } else {
+            hb = curPiece.getHeight(b);
+        }
+        return ha - hb;
+    }
+    
     protected void renderEdge(EdgeDirection dir) {
         boolean isTopEdge = (dir == EdgeDirection.Up) || (dir == EdgeDirection.Left);
         boolean isFlip = (dir == EdgeDirection.Up) || (dir == EdgeDirection.Down);
         int px, py, ph;
-        TilePiece cp;
+        TilePiece cp, transPiece = null;
         int ox[], oy[];
+        int transFrame = 0;
         
         // figure out the edge positions
         switch(dir) {
             case Up:
-                ox = new int[] { 7, 8, 9,10,11,12};
+                ox = new int[] { 6, 7, 8, 9,10,11};
                 oy = new int[] { 1, 2, 3, 4, 5, 6};
                 break;
             case Right:
-                ox = new int[] { 6, 7, 8, 9,10,11};
+                ox = new int[] {6, 7, 8, 9,10, 11};
                 oy = new int[] {11,10, 9, 8, 7, 6};
                 break;
             case Down:
@@ -148,7 +186,7 @@ public class TrackPieceTiler {
                 break;
             case Left:
             default:
-                ox = new int[] { 0, 1, 2, 3, 4, 5};
+                ox = new int[] { 1, 2, 3, 4, 5, 6};
                 oy = new int[] { 6, 5, 4, 3, 2, 1};
                 break;
         }
@@ -156,27 +194,39 @@ public class TrackPieceTiler {
         
         // Render the edge and its associated road tiles
         for (int i = 0; i < ox.length; i++) {
-            px = getPieceX() + ox[i];
-            py = getPieceY() + oy[i];
-            if (isTopEdge) {
-                cp = TilePiece.FlatEdgeTop;
-                ph = 2;
-            } else {
-                cp = TilePiece.FlatEdgeBottom;
-                ph = 3;
+            boolean isLast = (i == ox.length - 1);
+            int height = curPiece.getHeight(i+1);
+            int slope = getSlope(i+1, i);
+            int nextSlope = getSlope(i+2, i+1);
+            if (isFlip) {
+                height = curPiece.getHeight(i);
+                slope = getSlope(i, i+1);
+                nextSlope = getSlope(i-1, i);
             }
+            px = getPieceX() + ox[i];
+            py = getPieceY() + oy[i] - height;
+            cp = getEdgePiece(slope, isTopEdge);
+
             // draw the edge piece tiles
+            ph = getPieceHeight(cp);
             for (int k = 0; k < ph; k++) {
                 int cy = py + k;
                 if (isTopEdge) {
-                    cy -= (ph - 1);
+                    cy -= 1;
                 }
                 fg.setTile(px, cy, cp, k, isFlip);
             }
             
             
             // draw the road extending from the edge
-            cp = TilePiece.FlatRoad;
+            cp = getRoadPiece(slope);
+            ph = getPieceHeight(cp);
+            transPiece = getTransitionPiece(slope);
+            transFrame = getTransitionFrame(nextSlope);
+
+            if (isTopEdge) {
+                fg.setTile(px + ((isFlip) ? -1 : 1), py, transPiece, transFrame, isFlip);
+            }
             for (int j = 0; j < 2; j++) {
                 if (isTopEdge) {
                     py += 1;
@@ -188,8 +238,92 @@ public class TrackPieceTiler {
                 } else {
                     px -= 1;
                 }
-                fg.setTile(px, py, cp, 1, isFlip);
+                for (int k = 0; k < ph; k++) {
+                    fg.setTile(px, py + k, cp, k, isFlip);
+                }
+                if (slope != -2) {
+                    fg.setTile(px + ((isFlip) ? -1 : 1), py, transPiece, transFrame, isFlip);
+                }
             }
+            
+        }
+    }
+    protected TilePiece getTransitionPiece(int slope) {
+        switch (slope) {
+            case -2:
+                return TilePiece.TransitionSteepDown;
+            case -1:
+                return TilePiece.TransitionShallowDown;
+            case 0:
+            default:
+                return TilePiece.TransitionFlat;
+            case 1:
+                return TilePiece.TransitionShallowUp;
+            case 2:
+                return TilePiece.TransitionSteepUp;
+        }
+    }
+    protected int getTransitionFrame(int nextSlope) {
+        return nextSlope + 2;
+    }
+    
+    protected TilePiece getRoadPiece(int slope) {
+        switch (slope) {
+            case -2:
+                return TilePiece.SteepDownRoad;
+            case -1:
+                return TilePiece.ShallowDownRoad;
+            case 0:
+            default:
+                return TilePiece.FlatRoad;
+            case 1:
+                return TilePiece.ShallowUpRoad;
+            case 2:
+                return TilePiece.SteepUpRoad;
+        }
+    }
+    protected TilePiece getEdgePiece(int slope, boolean isTopEdge) {
+        switch (slope) {
+            case -2:
+                return (isTopEdge) ? TilePiece.SteepDownEdgeTop : TilePiece.SteepDownEdgeBottom;
+            case -1:
+                return (isTopEdge) ? TilePiece.ShallowDownEdgeTop : TilePiece.ShallowDownEdgeBottom;
+            case 0:
+            default:
+                return (isTopEdge) ? TilePiece.FlatEdgeTop : TilePiece.FlatEdgeBottom;
+            case 1:
+                return (isTopEdge) ? TilePiece.ShallowUpEdgeTop : TilePiece.ShallowUpEdgeBottom;
+            case 2:
+                return (isTopEdge) ? TilePiece.SteepUpEdgeTop : TilePiece.SteepUpEdgeBottom;
+        }
+    }
+    
+    protected int getPieceHeight(TilePiece tp) {
+        switch (tp) {
+            case Background:
+            case FlatRoad:
+            case ShallowDownEdgeTop:
+                return 1;
+            case FlatEdgeTop:
+            case ShallowDownEdgeBottom:
+            case ShallowUpRoad:        
+            case SteepDownEdgeTop:
+                return 2;
+            case FlatEdgeBottom:
+            case ShallowUpEdgeTop:
+            case SteepUpRoad:
+            case SteepDownEdgeBottom:
+                return 3;
+            case ShallowUpEdgeBottom:
+            case SteepUpEdgeTop:
+                return 4;
+            case SteepUpEdgeBottom:
+                return 5;
+            case Empty:
+            case SteepDownRoad:
+            case ShallowDownRoad:
+            default:
+                return 0;
         }
     }
     
