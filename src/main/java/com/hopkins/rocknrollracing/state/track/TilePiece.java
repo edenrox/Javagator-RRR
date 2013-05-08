@@ -30,7 +30,6 @@ public enum TilePiece {
     Puddle,
     
     Background,
-    PillarTop,
-    PillarMiddle,
-    PillarBottom
+    PillarTop, PillarBottom, 
+    PillarMiddle, PillarMiddleSmall, 
 }

@@ -67,6 +67,12 @@ public class TileLayer {
         tiles[index] = calculateValue(p, frame, isHFlip);
     }
     
+    public void setTiles(int x, int y, TilePiece p, int firstFrame, int height, boolean isHFlip) {
+        for (int i = 0; i < height; i++) {
+            setTile(x, y + i, p, firstFrame + i, isHFlip);
+        }
+    }
+    
     public TileLayer(int width, int height) {
         this.width = width;
         this.height = height;
