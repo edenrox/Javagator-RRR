@@ -27,6 +27,11 @@ public enum TrackPieceType {
     }
     
     public boolean isMultiHeight() {
-        return (this == StraightUp) || (this == StraightRight);
+        return (this == StraightUp) 
+                || (this == StraightRight)
+                || (this == JumpRight)
+                || (this == JumpDown)
+                || (this == JumpLeft)
+                || (this == JumpUp);
     }
 }

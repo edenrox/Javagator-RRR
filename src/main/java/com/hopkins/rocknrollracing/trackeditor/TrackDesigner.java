@@ -12,26 +12,23 @@ package com.hopkins.rocknrollracing.trackeditor;
 
 
 import com.hopkins.rocknrollracing.state.track.Track;
+import com.hopkins.rocknrollracing.state.track.TrackIO;
 import com.hopkins.rocknrollracing.state.track.TrackPiece;
 import com.hopkins.rocknrollracing.state.track.TrackPieceType;
 import com.hopkins.rocknrollracing.trackeditor.TrackPanel.TileClickEvent;
 import com.hopkins.rocknrollracing.views.elements.HudTrackElement;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JSlider;
-import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 /**
  *
@@ -45,6 +42,7 @@ public class TrackDesigner extends javax.swing.JFrame {
     protected PreviewPanel preview;
     protected HudTrackElement hudTrackElement;
     protected AbstractButton[] buttons;
+    protected TrackPiece scratchPiece;
     
     /** Creates new form TrackDesigner */
     public TrackDesigner() {
@@ -69,10 +67,11 @@ public class TrackDesigner extends javax.swing.JFrame {
             }
         });
         
-        setPieceHeight(getCurrentPiece());
-        
         preview = new PreviewPanel();
         jPanel4.add(preview);
+        
+        scratchPiece = new TrackPiece();
+        setPieceHeight(getCurrentPiece());
         
         setPieceType(TrackPieceType.CornerDownRight);
         
@@ -643,8 +642,8 @@ public class TrackDesigner extends javax.swing.JFrame {
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
@@ -705,13 +704,11 @@ public class TrackDesigner extends javax.swing.JFrame {
 
     private void doSave() {
         track.setNotes(notes.getText());
-        JSONObject obj = track.toJSON();
         try {
-            FileWriter fw = new FileWriter(curFilename);
-            fw.append(obj.toString());
-            fw.close();
-        } catch (Exception ex) {
-            
+            TrackIO.saveTrack(curFilename, track);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(rootPane, ex.toString());
+            ex.printStackTrace(System.err);
         }
     }
     
@@ -735,20 +732,15 @@ public class TrackDesigner extends javax.swing.JFrame {
             return;
         }
         curFilename = fileDialog.getSelectedFile().getAbsolutePath();
-        JSONObject obj = null;
-        
-        // read the file and parse as json
-        JSONParser parser = new JSONParser();
         try {
-            FileReader fr = new FileReader(curFilename);
-            obj = (JSONObject) parser.parse(fr);
-            fr.close();
-        } catch (Exception ex) {
-            
+            track = TrackIO.loadTrack(curFilename);
+            minimap.setTrack(track);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(rootPane, ex.toString());
+            ex.printStackTrace(System.err);
         }
         
         // load the JSON into the track
-        track.fromJSON(obj);
         notes.setText(track.getNotes());
         minimap.repaint();
     }//GEN-LAST:event_onOpen
@@ -769,13 +761,10 @@ public class TrackDesigner extends javax.swing.JFrame {
     }//GEN-LAST:event_onSave
 
     private void onPieceChange(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onPieceChange
-        if (getToolType() == ToolType.Inspect) {
-            TrackPiece p = track.getPiece(minimap.getSelectedTile().x, minimap.getSelectedTile().y);
-            p.setType(getPieceType());
-            minimap.repaint();
-        } else {
-            preview.setType(getPieceType());
-        }
+        TrackPiece p = getCurrentPiece();
+        p.setType(getPieceType());
+        minimap.repaint();
+        preview.setPiece(p);
     }//GEN-LAST:event_onPieceChange
 
     private void heightChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_heightChanged
@@ -790,7 +779,7 @@ public class TrackDesigner extends javax.swing.JFrame {
             p.setHeightAll(value);
             setPieceHeight(p);
         }
-        
+        preview.setPiece(p);
     }//GEN-LAST:event_heightChanged
 
     private void heightKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_heightKeyPressed
@@ -805,7 +794,11 @@ public class TrackDesigner extends javax.swing.JFrame {
     }//GEN-LAST:event_heightKeyPressed
 
     private TrackPiece getCurrentPiece() {
-        return track.getPiece(minimap.getSelectedTile().x, minimap.getSelectedTile().y);
+        if (getToolType() == ToolType.Paint) {
+            return scratchPiece;
+        } else {
+            return track.getPiece(minimap.getSelectedTile().x, minimap.getSelectedTile().y);
+        }
     }
     
     private ToolType getToolType() {
@@ -823,14 +816,20 @@ public class TrackDesigner extends javax.swing.JFrame {
     private void setPieceType(TrackPieceType type) {
         int index = type.ordinal();
         buttons[(index + 17) % 18].setSelected(true);
-        preview.setType(getPieceType());
+        
+        TrackPiece p = new TrackPiece();
+        p.setType(getPieceType());
+        preview.setPiece(p);
     }
     
     private void setPieceHeight(TrackPiece piece) {
         int max = heightPanel.getComponentCount();
         for(int i = 0; i < max; i++) {
             JSlider slider = (JSlider) heightPanel.getComponent(i);
-            slider.setValue(piece.getHeight(i));
+            int height = piece.getHeight(i);
+            if (slider.getValue() != height) {
+                slider.setValue(height);
+            }
         }
     }
     
@@ -843,8 +842,8 @@ public class TrackDesigner extends javax.swing.JFrame {
             case Inspect:
                 // load the piece
                 TrackPiece piece = getCurrentPiece();
-                setPieceType(piece.getType());
                 setPieceHeight(piece);
+                setPieceType(piece.getType());
                 break;
         }
     }

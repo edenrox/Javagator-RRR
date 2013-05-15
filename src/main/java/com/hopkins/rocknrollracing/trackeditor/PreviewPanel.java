@@ -4,8 +4,13 @@
  */
 package com.hopkins.rocknrollracing.trackeditor;
 
+import com.hopkins.rocknrollracing.state.Planet;
+import com.hopkins.rocknrollracing.state.track.TiledTrack;
+import com.hopkins.rocknrollracing.state.track.TrackPiece;
+import com.hopkins.rocknrollracing.state.track.TrackPieceTiler;
 import com.hopkins.rocknrollracing.state.track.TrackPieceType;
 import com.hopkins.rocknrollracing.views.elements.TrackPieceElement;
+import com.hopkins.rocknrollracing.views.elements.TrackTileRenderer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -18,27 +23,36 @@ public class PreviewPanel extends JPanel {
     public static final Color BACKGROUND_COLOR = new Color(112, 80, 8);
     
     
-    protected TrackPieceElement renderer;
-    protected TrackPieceType type;
+    protected TrackTileRenderer renderer;
+    protected TrackPiece piece;
+    protected TiledTrack tiledTrack;
+    protected TrackPieceTiler trackTiler;
     
 
-    public void setType(TrackPieceType value) {
-        type = value;
+    public void setPiece(TrackPiece value) {
+        piece = value;
+        tiledTrack.reset();
+        trackTiler.renderPiece(piece, 0, 0);
         repaint();
     }
-    public TrackPieceType getType() {
-        return type;
+    public TrackPiece getPiece() {
+        return piece;
     }
     
     
     
     public PreviewPanel() {
-        setPreferredSize(new Dimension(TrackPieceElement.WIDTH, TrackPieceElement.HEIGHT));
+        setPreferredSize(new Dimension(13 * 32, 30 * 8));
         setDoubleBuffered(true);
-        type = TrackPieceType.Empty;
-        renderer = new TrackPieceElement();
+        piece = new TrackPiece();
+        piece.setType(TrackPieceType.Empty);
+        
+        tiledTrack = new TiledTrack(40, 40);
+        trackTiler = new TrackPieceTiler(null, tiledTrack);
+        renderer = new TrackTileRenderer();
         try {
             renderer.load();
+            renderer.load(Planet.ChemVI);
         } catch (Exception ex) {
             System.err.println("Error loading renderer: " + ex.toString());
         }
@@ -48,7 +62,10 @@ public class PreviewPanel extends JPanel {
     public void paint(Graphics g) {
         g.setColor(BACKGROUND_COLOR);
         g.fillRect(0, 0, getWidth(), getHeight());
-        renderer.renderPiece(g, getWidth() / 2, 8, type);
+        
+        
+        renderer.renderSection(g, 0, 0, tiledTrack.getBG(), 0, 0, 20, 30); //bg
+        renderer.renderSection(g, 0, 0, tiledTrack.getFG(), 0, 0, 20, 30); //fg
     }
     
     

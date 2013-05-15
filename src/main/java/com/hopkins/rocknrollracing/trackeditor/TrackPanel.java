@@ -31,6 +31,10 @@ public class TrackPanel extends JPanel  {
     protected TileClickListener tcListener;
     protected BufferedImage buffer;
     
+    public void setTrack(Track value) {
+        track = value;
+    }
+    
     public TrackPanel(Track trk, HudTrackElement renderer) {
         tcListener = null;
         track = trk;

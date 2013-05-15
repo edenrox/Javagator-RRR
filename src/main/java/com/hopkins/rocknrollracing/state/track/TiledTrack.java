@@ -22,9 +22,9 @@ public class TiledTrack {
         return fg;
     }
     
-    public TiledTrack() {
-        bg = new TileLayer(TRACK_TILES_WIDE, TRACK_TILES_HIGH);
-        fg = new TileLayer(TRACK_TILES_WIDE, TRACK_TILES_HIGH);
+    public TiledTrack(int width, int height) {
+        bg = new TileLayer(width, height);
+        fg = new TileLayer(width, height);
         
         reset();
     }

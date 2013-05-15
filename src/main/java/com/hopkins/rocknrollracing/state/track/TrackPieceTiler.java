@@ -4,8 +4,6 @@
  */
 package com.hopkins.rocknrollracing.state.track;
 
-import com.hopkins.rocknrollracing.trackeditor.PieceFeatureType;
-
 /**
  *
  * @author ian
@@ -20,18 +18,24 @@ public class TrackPieceTiler {
     protected int ty;
     
     protected int getPieceX() {
+        if (track == null) {
+            return 0;// we aren't rendering a track
+        }
         return 13 * 5 + tx * 6 - ty * 6;
     }
     
     protected int getPieceY() {
+        if (track == null) {
+            return 5; // we aren't rendering a track
+        }
         return 6 + 6 * (tx + ty);
     }
     
     
-    public TrackPieceTiler(Track track, TileLayer fg, TileLayer bg) {
+    public TrackPieceTiler(Track track, TiledTrack tt) {
         this.track = track;
-        this.fg = fg;
-        this.bg = bg;
+        this.fg = tt.getFG();
+        this.bg = tt.getBG();
     }
     
     public void renderTrack() {
@@ -57,34 +61,36 @@ public class TrackPieceTiler {
         switch (curPiece.getType()) {
             case NotDown:
                 renderEdge(EdgeDirection.Down);
-                renderCornerInside(CornerDirection.North);
-                renderCornerInside(CornerDirection.East);
+                renderCornerInside(CornerDirection.South);
+                renderCornerInside(CornerDirection.West);
+                renderPillars(true);
                 break;
             case NotUp:
                 renderEdge(EdgeDirection.Up);
-                renderCornerInside(CornerDirection.South);
-                renderCornerInside(CornerDirection.West);
+                renderCornerInside(CornerDirection.North);
+                renderCornerInside(CornerDirection.East);
                 break;
             case NotLeft:
                 renderEdge(EdgeDirection.Left);
-                renderCornerInside(CornerDirection.East);
-                renderCornerInside(CornerDirection.South);
+                renderCornerInside(CornerDirection.West);
+                renderCornerInside(CornerDirection.North);
                 break;
             case NotRight:
                 renderEdge(EdgeDirection.Right);
-                renderCornerInside(CornerDirection.North);
+                renderCornerInside(CornerDirection.South);
                 renderCornerInside(CornerDirection.East);
+                renderPillars(false);
                 break;
             case StartRight:
                 renderEdge(EdgeDirection.Up);
                 renderEdge(EdgeDirection.Down);
-                renderStart(EdgeDirection.Right);
+                renderStart(true);
                 renderPillars(true);
                 break;
             case StartUp:
                 renderEdge(EdgeDirection.Left);
                 renderEdge(EdgeDirection.Right);
-                renderStart(EdgeDirection.Up);
+                renderStart(false);
                 renderPillars(false);
                 break;
             case StraightUp:
@@ -112,7 +118,6 @@ public class TrackPieceTiler {
             case CornerDownLeft:
                 renderCornerOutside(CornerDirection.East);
                 renderCornerInside(CornerDirection.East);
-                renderPillars(false);
                 break;
             case CornerDownRight:
                 renderCornerOutside(CornerDirection.North);
@@ -121,15 +126,17 @@ public class TrackPieceTiler {
             case CornerUpLeft:
                 renderCornerOutside(CornerDirection.South);
                 renderCornerInside(CornerDirection.South);
-                renderPillars(true);
-                renderPillars(false);
                 break;
             case CornerUpRight:
                 renderCornerOutside(CornerDirection.West);
                 renderCornerInside(CornerDirection.West);
-                renderPillars(true);
                 break;
-            
+            case Cross:
+                renderCornerInside(CornerDirection.North);
+                renderCornerInside(CornerDirection.East);
+                renderCornerInside(CornerDirection.South);
+                renderCornerInside(CornerDirection.West);
+                break;
             default:
             case JumpUp:
             case JumpLeft:
@@ -141,21 +148,31 @@ public class TrackPieceTiler {
         TrackPiece prev = null, next = null;
         int ha = 0, hb = 0;
         
-        switch (curPiece.getType()) {
-            case StartUp:
-            case StraightUp:
-            case JumpUp:
-            case JumpDown:
-                prev = track.getPiece(tx, ty + 1);
-                next = track.getPiece(tx, ty - 1);
-                break;
-            case StartRight:
-            case StraightRight:
-            case JumpRight:
-            case JumpLeft:
-                prev = track.getPiece(tx - 1, ty);
-                next = track.getPiece(tx + 1, ty);
-                break;
+        if (track == null) {
+            // incase we are just rendering a single piece
+            prev = curPiece;
+            next = curPiece;
+        } else {
+            switch (curPiece.getType()) {
+                case StartUp:
+                case StraightUp:
+                case JumpUp:
+                case JumpDown:
+                case NotLeft:
+                case NotRight:
+                    prev = track.getPiece(tx, ty + 1);
+                    next = track.getPiece(tx, ty - 1);
+                    break;
+                case StartRight:
+                case StraightRight:
+                case JumpRight:
+                case JumpLeft:
+                case NotUp:
+                case NotDown:
+                    prev = track.getPiece(tx - 1, ty);
+                    next = track.getPiece(tx + 1, ty);
+                    break;
+            }
         }
         if (a == -1) {
             ha = prev.getHeight(5);
@@ -175,6 +192,7 @@ public class TrackPieceTiler {
     }
     
     protected void renderEdge(EdgeDirection dir) {
+        
         boolean isTopEdge = (dir == EdgeDirection.Up) || (dir == EdgeDirection.Left);
         boolean isFlip = (dir == EdgeDirection.Up) || (dir == EdgeDirection.Down);
         int px, py, ph;
@@ -206,7 +224,6 @@ public class TrackPieceTiler {
         
         // Render the edge and its associated road tiles
         for (int i = 0; i < ox.length; i++) {
-            boolean isLast = (i == ox.length - 1);
             int height = curPiece.getHeight(i+1);
             int slope = getSlope(i+1, i);
             int nextSlope = getSlope(i+2, i+1);
@@ -218,6 +235,8 @@ public class TrackPieceTiler {
             px = getPieceX() + ox[i];
             py = getPieceY() + oy[i] - height;
             cp = getEdgePiece(slope, isTopEdge);
+            
+            
 
             // draw the edge piece tiles
             ph = getPieceHeight(cp);
@@ -225,7 +244,17 @@ public class TrackPieceTiler {
             if (isTopEdge) {
                 cy -= 1;
             }
-            fg.setTiles(px, cy, cp, 0, ph, isFlip);
+            if (slope == -2) {
+                cy -= 1;
+            }
+            if ((ox[i] == 6)
+                    && (oy[i] == 1) 
+                    && (fg.getTile(px, py) != TilePiece.Empty)) {
+                // skip this for the inside of corners
+            } else {
+                fg.setTiles(px, cy, cp, 0, ph, isFlip);
+            }
+            
             
             // draw the road extending from the edge
             cp = getRoadPiece(slope);
@@ -338,8 +367,45 @@ public class TrackPieceTiler {
         }
     }
     
-    protected void renderStart(EdgeDirection dir) {
+    protected void renderStart(boolean isFlip) {
+        int ox[] = new int[] { 5, 5, 6, 7, 8};
+        int oy[] = new int[] { 3, 4, 5, 6, 7};
+        TilePiece tp = TilePiece.FlatFinish;
         
+        if (isFlip) {
+            ox = new int[] { 8, 7, 6, 5, 5};
+            oy = new int[] { 5, 6, 7, 8, 9};
+        }
+        
+        int height = curPiece.getHeight();
+        for(int i = 0; i < ox.length; i++) {
+            int px = getPieceX() + ox[i];
+            int py = getPieceY() + oy[i] - height;
+            if (i == 0) {
+                // top
+                fg.setTile(px, py, tp, (isFlip) ? 1 : 0, isFlip);
+                fg.setTile(px+1, py, tp, (isFlip) ? 0 : 1, isFlip);
+            } else if (i == ox.length - 1) {
+                // bottom
+                fg.setTile(px, py, tp, (isFlip) ? 3 : 2, isFlip);
+                fg.setTile(px+1, py, tp, (isFlip) ? 2 : 3, isFlip);
+            } else {
+                // middle
+                if (isFlip) {
+                    // left
+                    fg.setTile(px, py, tp, 1, true);
+                    // right
+                    fg.setTile(px + 2, py, tp, 3, false);
+                } else {
+                    // left
+                    fg.setTile(px, py, tp, 2, false);
+                    // right
+                    fg.setTile(px + 2, py, tp, 1, false);
+                }
+                // center
+                fg.setTile(px + 1, py, tp, 4, false);
+            }
+        }
     }
     
     protected void renderJump(EdgeDirection dir) {
@@ -347,16 +413,144 @@ public class TrackPieceTiler {
     }
 
     
+    protected void renderFlatRoadColumn(int px, int py, int height, boolean startOnX) {
+        boolean isX = startOnX;
+        TilePiece tp;
+        int frame;
+        for (int i = 0; i < height; i++) {
+            tp = (isX) ? TilePiece.FlatRoad : TilePiece.TransitionFlat;
+            frame = (isX) ? 0 : 2;
+            fg.setTile(px, py + i, tp, frame, false);
+            isX = !isX;
+        }
+    }
+    
     protected void renderCornerInside(CornerDirection dir) {
-        
+        int px = getPieceX();
+        int py = getPieceY() - curPiece.getHeight();
+        switch(dir) {
+            case North:
+                fg.setTiles(px + 6, py + 11, TilePiece.CornerNorthInside, 0, 3, false);
+                
+                renderFlatRoadColumn(px + 4, py + 9, 1, true);
+                renderFlatRoadColumn(px + 5, py + 8, 3, true);
+                renderFlatRoadColumn(px + 6, py + 7, 4, true);
+                renderFlatRoadColumn(px + 7, py + 8, 3, true);
+                renderFlatRoadColumn(px + 8, py + 9, 1, true);
+                
+                break;
+            case South:
+                fg.setTiles(px + 6, py, TilePiece.CornerSouthInside, 0, 2, false);
+                renderFlatRoadColumn(px + 3, py + 3, 1, false);
+                renderFlatRoadColumn(px + 4, py + 2, 3, false);
+                renderFlatRoadColumn(px + 5, py + 1, 5, false);
+                renderFlatRoadColumn(px + 6, py + 2, 5, false);
+                renderFlatRoadColumn(px + 7, py + 1, 5, false);
+                renderFlatRoadColumn(px + 8, py + 2, 3, false);
+                renderFlatRoadColumn(px + 9, py + 3, 1, false);
+                
+                break;
+            case East:
+                fg.setTiles(px, py + 5, TilePiece.CornerWestInside, 0, 3, true);
+                renderFlatRoadColumn(px + 1, py + 5, 2, false);
+                renderFlatRoadColumn(px + 2, py + 4, 4, false);
+                renderFlatRoadColumn(px + 3, py + 4, 5, true);
+                renderFlatRoadColumn(px + 4, py + 5, 4, true);
+                renderFlatRoadColumn(px + 5, py + 6, 2, true);
+                break;
+            case West:
+                fg.setTiles(px + 12, py + 5, TilePiece.CornerWestInside, 0, 3, false);
+                renderFlatRoadColumn(px + 11, py + 5, 2, false);
+                renderFlatRoadColumn(px + 10, py + 4, 4, false);
+                renderFlatRoadColumn(px + 9, py + 4, 5, true);
+                renderFlatRoadColumn(px + 8, py + 5, 4, true);
+                renderFlatRoadColumn(px + 7, py + 6, 2, true);
+                break;
+        }
+    }
+    
+    protected void renderCornerTiles(TileLayer layer, int px, int py, TilePiece piece, int width, int height, boolean flip) {
+        int frame;
+        for(int x = 0; x < width; x++) {
+            if (flip) {
+                frame = (width - x - 1) * height;
+            } else {
+                frame = x * height;
+            }
+            for (int y = 0; y < height; y++){
+                layer.setTile(px + x, py + y, piece, frame, flip);
+                frame++;
+            }
+        }
     }
     
     protected void renderCornerOutside(CornerDirection dir) {
-        
+        int px = getPieceX();
+        int py = getPieceY() - curPiece.getHeight();
+        switch(dir) {
+            case North:
+                renderCornerTiles(fg, px+1, py+3, TilePiece.CornerNorthOutside, 11, 4, false);
+                renderFlatRoadColumn(px + 2, py + 7, 1, true);
+                renderFlatRoadColumn(px + 3, py + 6, 3, true);
+                renderFlatRoadColumn(px + 4, py + 5, 4, true);
+                renderFlatRoadColumn(px + 5, py + 5, 3, false);
+                renderFlatRoadColumn(px + 6, py + 5, 2, true);
+                renderFlatRoadColumn(px + 7, py + 5, 3, false);
+                renderFlatRoadColumn(px + 8, py + 5, 4, true);
+                renderFlatRoadColumn(px + 9, py + 6, 3, true);
+                renderFlatRoadColumn(px + 10, py + 7, 1, true);
+                break;
+            case South:
+                renderCornerTiles(fg, px+1, py+6, TilePiece.CornerSouthOutside, 11, 5, false);
+                renderFlatRoadColumn(px + 1, py + 5, 1, false);
+                renderFlatRoadColumn(px + 2, py + 4, 2, false);
+                renderFlatRoadColumn(px + 3, py + 4, 3, true);
+                renderFlatRoadColumn(px + 4, py + 5, 2, true);
+                renderFlatRoadColumn(px + 5, py + 6, 2, true);
+                renderFlatRoadColumn(px + 6, py + 7, 1, true);
+                renderFlatRoadColumn(px + 7, py + 6, 2, true);
+                renderFlatRoadColumn(px + 8, py + 5, 2, true);
+                renderFlatRoadColumn(px + 9, py + 4, 3, true);
+                renderFlatRoadColumn(px + 10, py + 4, 2, false);
+                renderFlatRoadColumn(px + 11, py + 5, 1, false);
+                break;
+            case East:
+                renderCornerTiles(fg, px+6, py, TilePiece.CornerWestOutside, 3, 14, true);
+                renderFlatRoadColumn(px + 3, py + 3, 1, false);
+                renderFlatRoadColumn(px + 4, py + 2, 8, false);
+                renderFlatRoadColumn(px + 5, py + 1, 10, false);
+                renderFlatRoadColumn(px + 6, py + 3, 7, true);
+                
+                break;
+            case West:
+                renderCornerTiles(fg, px+4, py, TilePiece.CornerWestOutside, 3, 14, false);
+                
+                renderFlatRoadColumn(px + 6, py + 3, 7, true);
+                renderFlatRoadColumn(px + 7, py + 1, 10, false);
+                renderFlatRoadColumn(px + 8, py + 2, 8, false);
+                renderFlatRoadColumn(px + 9, py + 3, 1, false);
+                break;
+        }
     }
     
-    protected void iterateEdge() {
-        
+    protected void renderPillar(int px, int py, int h, boolean isFlip) {
+        // Top Piece
+        bg.setTiles(px, py - h, TilePiece.PillarTop, 0, 4, isFlip);
+
+        // Height adjustable piece
+        for(int j = 0; j < h; j++) {
+            int offset = (int) (Math.random() * 4);
+            bg.setTile(px, py + 4 - h + j, TilePiece.PillarMiddleSmall, offset, isFlip);
+        }
+
+        // Center Piece
+        py += 4;
+        int offset = (int) (Math.random() * 4);
+        bg.setTiles(px, py, TilePiece.PillarMiddle, offset * 4, 4, isFlip);
+
+        // Bottom Piece
+        py += 4;
+        bg.setTiles(px, py, TilePiece.PillarBottom, 0, 4, isFlip);
     }
     
     protected void renderPillars(boolean isFlip) {
@@ -376,23 +570,7 @@ public class TrackPieceTiler {
             px = getPieceX() + ox[i];
             py = getPieceY() + oy[i];
             
-            // Top Piece
-            bg.setTiles(px, py - h, TilePiece.PillarTop, 0, 4, isFlip);
-            
-            // Height adjustable piece
-            for(int j = 0; j < h; j++) {
-                int offset = (int) (Math.random() * 4);
-                bg.setTile(px, py + 4 - h + j, TilePiece.PillarMiddleSmall, offset, isFlip);
-            }
-
-            // Center Piece
-            py += 4;
-            int offset = (int) (Math.random() * 4);
-            bg.setTiles(px, py, TilePiece.PillarMiddle, offset * 4, 4, isFlip);
-            
-            // Bottom Piece
-            py += 4;
-            bg.setTiles(px, py, TilePiece.PillarBottom, 0, 4, isFlip);
+            renderPillar(px, py, h, isFlip);
         }
 
     }
@@ -416,20 +594,6 @@ public class TrackPieceTiler {
             fg.setTile(x + ox, y + oy, TilePiece.Puddle, 0, isFlip);
         }
     }
-    
-    protected void renderPillar(int x, int y, TileLayer bg) {
-        renderPillarPiece(x, y, bg, TilePiece.PillarTop);
-        renderPillarPiece(x, y+4, bg, TilePiece.PillarMiddle);
-        renderPillarPiece(x, y+8, bg, TilePiece.PillarBottom);
-    }
-    
-    protected void renderPillarPiece(int x, int y, TileLayer bg, TilePiece piece) {
-        bg.setTile(x, y, piece, 0, false);
-        bg.setTile(x, y+1, piece, 0, false);
-        bg.setTile(x, y+2, piece, 0, false);
-        bg.setTile(x, y+3, piece, 0, false);
-    } 
-
     
     public enum CornerDirection {
         North, East, South, West

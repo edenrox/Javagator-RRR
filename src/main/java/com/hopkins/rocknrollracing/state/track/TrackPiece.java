@@ -65,14 +65,19 @@ public class TrackPiece {
     public void fromJSON(JSONObject obj) {
         try {
             type = TrackPieceType.valueOf((String) obj.get("type"));
-            if (obj.containsKey("height")) {
+            Object objHeight = obj.get("height");
+            if (objHeight != null) {
                 if (type.isMultiHeight()) {
-                    JSONArray arr = (JSONArray) obj.get("height");
-                    for(int i = 0; i < arr.size(); i++) {
-                        setHeight(i, ((Long) arr.get(i)).intValue());
+                    if (objHeight.getClass().equals(JSONArray.class)) {
+                        JSONArray arr = (JSONArray) obj.get("height");
+                        for(int i = 0; i < arr.size(); i++) {
+                            setHeight(i, ((Long) arr.get(i)).intValue());
+                        }
                     }
                 } else {
-                    setHeightAll(((Long) obj.get("height")).intValue());
+                    if (objHeight.getClass().equals(Long.class)) {
+                        setHeightAll(((Long) obj.get("height")).intValue());
+                    }
                 }
             }
         } catch (IllegalArgumentException ex) {

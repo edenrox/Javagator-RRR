@@ -55,7 +55,7 @@ public class TileLayer {
     
     protected int calculateValue(TilePiece p, int frame, boolean isHFlip) {
         int value = p.ordinal() << 8;
-        value += (frame & 0x8F) << 1;
+        value += (frame & 0x7F) << 1;
         if (isHFlip) {
             value += 1;
         }
@@ -64,7 +64,8 @@ public class TileLayer {
     
     public void setTile(int x, int y, TilePiece p, int frame, boolean isHFlip) {
         int index = getIndex(x, y);
-        tiles[index] = calculateValue(p, frame, isHFlip);
+        int value = calculateValue(p, frame, isHFlip);
+        tiles[index] = value;
     }
     
     public void setTiles(int x, int y, TilePiece p, int firstFrame, int height, boolean isHFlip) {
