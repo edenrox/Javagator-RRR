@@ -4,73 +4,90 @@
  */
 package com.hopkins.rocknrollracing.sound;
 
-import com.hopkins.rocknrollracing.Application;
 import com.hopkins.rocknrollracing.utils.Inflector;
+import java.io.SequenceInputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author ian
  */
-public class Larry {
-    
-    public static final String CHARCTER_PATH = "/sounds/characters/%s.wav";
+public class Larry implements LineListener {
     public static final String SOUND_PATH = "/sounds/%s.wav";
     public static final Logger logger = Logger.getLogger(Larry.class);
     
-    protected Application app;
-    protected boolean isPlaying;
+    protected Clip theClip;
     
-    public Larry(Application theApp) {
-        app = theApp;
+    public Larry() {
+        theClip = null;
     }
     
-    public void playPodium(String character, int position, Object toNotify) {
+    protected AudioInputStream loadClip(String clipName) throws Exception {
+        return AudioSystem.getAudioInputStream(
+                Larry.class.getResourceAsStream(
+                    String.format(SOUND_PATH, clipName)));
+    }
+    
+    protected List<AudioInputStream> loadClips(String[] clipNames) {
+        ArrayList<AudioInputStream> rv = new ArrayList<AudioInputStream>();
+        
+        for(String clipName : clipNames) {
+            try {
+                rv.add(loadClip(Inflector.underscore(clipName)));
+            } catch (Exception ex) {
+                logger.error("Error loading clip: " + clipName, ex);
+            }
+        }
+        
+        return rv;
+    }
+    
+    protected AudioInputStream concatenateClips(List<AudioInputStream> streams) {
+        long length = 0;
+        for(AudioInputStream item : streams) {
+            length += item.getFrameLength();
+        }
+        return new AudioInputStream(
+                new SequenceInputStream(Collections.enumeration(streams)),
+                streams.get(0).getFormat(),
+                length);
+    }
+    
+    public synchronized void startPlaying(String... clipNames) {
+        AudioInputStream ais = concatenateClips(loadClips(clipNames));
+        
         try {
-            Clip nameClip = AudioSystem.getClip();
-            Clip positionClip = AudioSystem.getClip();
-            nameClip.open(getCharacterSound(character));
-            positionClip.open(getPositionSound(position));
-            
-            nameClip.start();
-            Thread.sleep(200);
-            while (nameClip.isRunning()) {
-                Thread.sleep(200);
-            }
-            positionClip.start();
-            Thread.sleep(200);
-            while (positionClip.isRunning()) {
-                Thread.sleep(200);
-            }
-            nameClip.close();
-            positionClip.close();
-            
+            theClip = AudioSystem.getClip();
+            theClip.open(ais);
+            theClip.addLineListener(this);
+            theClip.start();
         } catch (Exception ex) {
-            logger.error(String.format("error playing podium (%s %d)", character, position), ex);
+            logger.error("Error playing clip", ex);
         }
     }
     
-    protected AudioInputStream getPositionSound(int position) throws Exception {
-        String[] clipNames = new String[] {
-            "", 
-            "scores a first place knock out", 
-            "finishes second", 
-            "takes a weak third", 
-            "is in another timezone"
-        };
-        
-        return AudioSystem.getAudioInputStream(
-                Application.class.getResourceAsStream(
-                    String.format(SOUND_PATH, Inflector.underscore(clipNames[position]))));
+    public synchronized void waitUntilFinished() throws InterruptedException {
+        this.wait();
     }
     
-    protected AudioInputStream getCharacterSound(String characterName) throws Exception {
-        return AudioSystem.getAudioInputStream(
-                Application.class.getResourceAsStream(
-                    String.format(CHARCTER_PATH, Inflector.underscore(characterName))));
+    public synchronized boolean isPlaying() {
+        return (theClip != null);
+    }
+    
+    public synchronized void update(LineEvent event) {
+        if (event.getType() == LineEvent.Type.STOP) {
+            theClip.close();
+            theClip = null;
+            this.notify();
+        }
     }
     
     
