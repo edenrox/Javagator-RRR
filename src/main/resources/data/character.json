@@ -1,9 +1,0 @@
-[
-    {"name": "Snake Sanders", "planet": "Terra", "skills": ["Acceleration","Top Speed"]},
-    {"name": "Cyberhawk","planet": "Serpentis", "skills": ["Acceleration","Jumping"]},
-    {"name": "Ivanzypher","planet": "Fleagull", "skills": ["Jumping","Top Speed"]},
-    {"name": "Katarina Lyons","planet": "Panteros V", "skills": ["Jumping","Cornering"]},
-    {"name": "Jake Badlands","planet": "Xeno Prime", "skills": ["Acceleration","Cornering"]},
-    {"name": "Tarquinn","planet": "Aurora", "skills": ["Top Speed","Cornering"]},
-    {"name": "Olaf","planet": "Valhalla", "skills": ["Acceleration","Top Speed", "Cornering"]},
-]
