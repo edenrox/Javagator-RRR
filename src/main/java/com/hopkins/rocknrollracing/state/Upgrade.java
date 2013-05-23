@@ -52,7 +52,7 @@ public class Upgrade extends NamedModel {
     };
     
     public static final Upgrade JumpJet = new Upgrade("Locust Jump Jets", 11000, "1 Gas Charge");
-    public static final Upgrade Nitro = new Upgrade("Lightning NItro", 24000, "1 Bottle");
+    public static final Upgrade Nitro = new Upgrade("Lightning Nitro", 24000, "1 Bottle");
     
     public static final Upgrade[] Boost = new Upgrade[] {
         JumpJet, Nitro
