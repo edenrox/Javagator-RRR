@@ -1,0 +1,80 @@
+Game Design
+
+Silicon and Synapse
+Alan Pavlish
+
+
+Producers
+
+Allen Adham
+Alan Pavlish
+
+
+Executive Producer
+
+Brian Fargo
+
+
+Programming
+
+Bob Fitch
+Pat Wyatt
+Allen Adham
+
+
+Artwork
+
+Samwise Didier
+Ron Millar
+Joeyray Hall
+
+
+Additional Artwork
+
+Stu Rose
+Clyde Matusmoto
+Paul Barton
+Anthony Gomez
+
+
+Voice
+
+Larry Supermouth Huffman
+
+
+Audio Programming
+
+Software Creations
+
+
+Quality Assurance Director
+
+Kerry Garrison
+
+
+Assistant QA Director
+
+Rodney Relosa
+
+
+Lead Testers
+
+Dave Healy
+Dean Schulte
+Chris Tremmel
+
+
+Additional Testing
+
+Frank Alberry
+Michael Packard
+Brian Fargo
+Matt Findley
+Everyone at Interplay
+
+
+Thanks to
+
+Todd Camasta
+Bill Heineman
+Allen Anderson
