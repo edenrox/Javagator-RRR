@@ -7,10 +7,8 @@ package com.hopkins.rocknrollracing.views.elements;
 import com.hopkins.rocknrollracing.state.Boost;
 import com.hopkins.rocknrollracing.state.Drop;
 import com.hopkins.rocknrollracing.state.Weapon;
-import com.hopkins.rocknrollracing.state.race.BonusType;
-import com.hopkins.rocknrollracing.state.race.CarRaceItem;
-import com.hopkins.rocknrollracing.state.race.RaceState;
-import com.hopkins.rocknrollracing.utils.ImageUtils;
+import com.hopkins.rocknrollracing.state.race.RaceCar;
+import com.hopkins.rocknrollracing.state.race.World;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -33,7 +31,7 @@ public class HudElement extends AppElement {
     
     protected BufferedImage charges, armor, colors;
     protected FontBasicElement font;
-    protected HudTrackElement track;
+    protected HudTrackElement minimap;
 
     @Override
     public void load() throws Exception {
@@ -43,47 +41,50 @@ public class HudElement extends AppElement {
         font = new FontBasicElement();
         font.load();
         
-        track = new HudTrackElement();
-        track.load();
+        minimap = new HudTrackElement();
+        minimap.load();
     }
     
     
-    public void renderHud(Graphics g, RaceState rs, long ticks) {
+    public void renderHud(Graphics g, World theWorld, long ticks) {
         
-        CarRaceItem playerCar = rs.getCars().get(0);
+        RaceCar playerCar = theWorld.RaceCars.get(0);
         
-        track.renderCarPositions(g, 8, 8, rs);
-        track.renderTrack(g, 8, 8, rs.getTrack());
+        // Mini Map
+        minimap.renderCarPositions(g, 8, 8, theWorld);
+        minimap.renderTrack(g, 8, 8, theWorld.Track);
+        
+        // Status across the top
         renderCharges(g, playerCar);
-        renderArmor(g, playerCar.Armor.getAvailable());
-        renderLaps(g, playerCar.getLapsRemaining(rs));
-        if (rs.PlayerPaused > 0) {
+        renderArmor(g, playerCar.Charges.Armor);
+        
+        // Status across the bottom
+        renderLaps(g, playerCar.Place.LapNumber);
+        
+        
+        /*if (rs.PlayerPaused > 0) {
             renderPaused(g, ticks);
         } else {
             //renderBonus(g, )
-        }
+        }*/
     }
     
     
     
-    protected void renderCharges(Graphics g, CarRaceItem playerCar) {
-        Weapon weapon = playerCar.getModel().getWeapon();
-        Drop drop = playerCar.getModel().getDrop();
-        Boost boost = playerCar.getModel().getBoost();
+    protected void renderCharges(Graphics g, RaceCar rc) {
+        Weapon weapon = rc.Model.getWeapon();
+        Drop drop = rc.Model.getDrop();
+        Boost boost = rc.Model.getBoost();
         
-        renderCharge(g, 88, 9, weapon.ordinal(), playerCar.Charges[0].getAvailable());
-        renderCharge(g, 121, 9, 3 + boost.ordinal(), playerCar.Charges[1].getAvailable());
-        renderCharge(g, 152, 9, 5 + drop.ordinal(), playerCar.Charges[2].getAvailable());
+        renderCharge(g, 88, 9, weapon.ordinal(), rc.Charges.Weapon);
+        renderCharge(g, 121, 9, 3 + boost.ordinal(), rc.Charges.Boost);
+        renderCharge(g, 152, 9, 5 + drop.ordinal(), rc.Charges.Drop);
     }
     
     protected void renderCharge(Graphics g, int x, int y, int frame, int quantity) {
         SpriteRenderer.render(g, charges, x, y, CHARGES_WIDTH, CHARGES_HEIGHT, frame, false, false);
         
         font.renderText(g, x+16, y+7, "" + quantity);
-    }
-    
-    protected void renderBonus(Graphics g, BonusType bonus) {
-        
     }
     
     protected void renderPaused(Graphics g, long ticks) {

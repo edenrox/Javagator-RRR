@@ -8,9 +8,9 @@ package com.hopkins.rocknrollracing.state.race;
  *
  * @author ian
  */
-public enum BonusType {
-    Attack,
-    Health,
-    Money,
-    Lapping
+public class RaceCarCharges {
+    public int Armor;
+    public int Weapon;
+    public int Drop;
+    public int Boost;
 }

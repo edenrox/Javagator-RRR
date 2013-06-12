@@ -5,7 +5,6 @@
 package com.hopkins.rocknrollracing.state.race;
 
 import com.hopkins.rocknrollracing.state.HasFace;
-import com.hopkins.rocknrollracing.utils.ArrayUtils;
 
 /**
  *

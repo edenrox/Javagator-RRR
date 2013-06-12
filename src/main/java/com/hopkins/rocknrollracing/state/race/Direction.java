@@ -8,6 +8,6 @@ package com.hopkins.rocknrollracing.state.race;
  *
  * @author ian
  */
-public enum CarAction {
-    Accelerate, TurnLeft, TurnRight, Weapon, Drop, Boost
+public enum Direction {
+    None, Up, Right, Down, Left
 }

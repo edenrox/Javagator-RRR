@@ -17,6 +17,15 @@ public class TrackPiece {
     
     protected TrackPieceType type;
     protected int[] height;
+    protected boolean isCheckPoint;
+    
+    public boolean isCheckPoint() {
+        return isCheckPoint;
+    }
+    
+    public void setCheckPoint(boolean value) {
+        isCheckPoint = value;
+    }
     
     public TrackPieceType getType() {
         return type;
@@ -59,6 +68,9 @@ public class TrackPiece {
         } else {
             obj.put("height", getHeight());
         }
+        if (isCheckPoint) {
+            obj.put("checkpoint", "true");
+        }
         return obj;
     }
     
@@ -80,6 +92,7 @@ public class TrackPiece {
                     }
                 }
             }
+            isCheckPoint = ("true".equals(obj.get("checkpoint")));
         } catch (IllegalArgumentException ex) {
             type = TrackPieceType.Empty;
             log.error(ex);

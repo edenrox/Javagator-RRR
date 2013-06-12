@@ -4,6 +4,9 @@
  */
 package com.hopkins.rocknrollracing.state.track;
 
+import com.hopkins.rocknrollracing.state.race.Vector2D;
+import com.hopkins.rocknrollracing.state.race.Vector3D;
+import com.hopkins.rocknrollracing.trackeditor.PieceFeatureType;
 import java.text.SimpleDateFormat;
 import java.util.Calendar; 
 import org.json.simple.JSONArray;
@@ -18,9 +21,19 @@ public class Track {
     public static final float EPSILON = 0.001f;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
+    public static final float FLOOR = -3;
     
     protected TrackPiece[] pieces;
     protected String notes;
+    protected boolean isReverse;
+    
+    public boolean isReverse() {
+        return isReverse;
+    }
+    
+    public void setReverse(boolean value) {
+        isReverse = value;
+    }
     
     public String getNotes() {
         return notes;
@@ -76,11 +89,7 @@ public class Track {
         
     }
     
-    public static class TrackValidationException extends RuntimeException {
-        public TrackValidationException(String message) {
-            super(message);
-        }
-    }
+    
     
     protected JSONArray getPiecesJSON() {
         JSONArray arr = new JSONArray();
@@ -105,6 +114,9 @@ public class Track {
         obj.put("width", WIDTH);
         obj.put("height", HEIGHT);
         obj.put("notes", notes);
+        if (isReverse()) {
+            obj.put("reverse", "true");
+        }
         obj.put("pieces", getPiecesJSON());
         
         return obj;
@@ -132,8 +144,51 @@ public class Track {
         // load the data
         notes = (String) obj.get("notes");
         setPiecesJSON((JSONArray) obj.get("pieces"));
+        
+        isReverse = ("true".equals(obj.get("isReverse")));
     }
     
+    public float getHeightAt(Vector3D pos) {
+        if (!isRoadWay(pos)) {
+            return FLOOR;
+        } else {
+            return 0;
+        }
+    }
+    
+    public boolean isRoadWay(Vector3D pos) {
+        return true;
+    }
+    
+    public Vector2D findStartLine() {
+        TrackPieceType[] startTypes = new TrackPieceType[] {TrackPieceType.StartUp, TrackPieceType.StartRight};
+        Vector2D rv = null;
+        for(TrackPieceType startType : startTypes) {
+            rv = findPieceLocation(startType);
+            if (rv != null) {
+                break;
+            }
+        }
+        return rv;
+    }
+    
+    public Vector2D findPieceLocation(TrackPieceType type) {
+        for(int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                if (getPiece(x, y).getType() == type) {
+                    return new Vector2D(x, y);
+                }
+            }
+        }
+        return null;
+    }
+    
+            
+    public static class TrackValidationException extends RuntimeException {
+        public TrackValidationException(String message) {
+            super(message);
+        }
+    }
     public static class TrackLoadException extends RuntimeException {
         public TrackLoadException(String message) {
             super(message);

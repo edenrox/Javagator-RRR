@@ -9,5 +9,5 @@ package com.hopkins.rocknrollracing.views.elements;
  * @author ian
  */
 public enum CarEffectType {
-    Damage, Explosion, Nitro, Smoke, Parts
+    Damage, Explosion, Nitro, Smoke, Parts, Shadow
 }

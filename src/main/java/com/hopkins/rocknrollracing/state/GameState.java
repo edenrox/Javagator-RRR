@@ -97,4 +97,14 @@ public class GameState {
         Player1.Points = 0;
     }
     
+    public int getNumPowerUps() {
+        if (GameDifficulty == Difficulty.Warrior) {
+            return 5;
+        } else if (GameDifficulty == Difficulty.Veteran) {
+            return 10;
+        } else { //(GameDifficulty == Difficulty.Rookie) {
+            return 20;
+        }
+    }
+    
 }

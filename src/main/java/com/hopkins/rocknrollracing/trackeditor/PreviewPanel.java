@@ -9,7 +9,6 @@ import com.hopkins.rocknrollracing.state.track.TiledTrack;
 import com.hopkins.rocknrollracing.state.track.TrackPiece;
 import com.hopkins.rocknrollracing.state.track.TrackPieceTiler;
 import com.hopkins.rocknrollracing.state.track.TrackPieceType;
-import com.hopkins.rocknrollracing.views.elements.TrackPieceElement;
 import com.hopkins.rocknrollracing.views.elements.TrackTileRenderer;
 import java.awt.Color;
 import java.awt.Dimension;

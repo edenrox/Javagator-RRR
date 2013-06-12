@@ -7,16 +7,16 @@ package com.hopkins.rocknrollracing.views;
 import com.hopkins.rocknrollracing.inject.Inject;
 import com.hopkins.rocknrollracing.state.CarState;
 import com.hopkins.rocknrollracing.state.Drop;
+import com.hopkins.rocknrollracing.state.Planet;
 import com.hopkins.rocknrollracing.state.PowerUp;
 import com.hopkins.rocknrollracing.state.Weapon;
-import com.hopkins.rocknrollracing.state.race.CarRaceItem;
-import com.hopkins.rocknrollracing.state.race.Coord;
-import com.hopkins.rocknrollracing.state.race.RaceItem;
-import com.hopkins.rocknrollracing.state.race.RaceState;
+import com.hopkins.rocknrollracing.state.race.Angle3D;
+import com.hopkins.rocknrollracing.state.race.Entity;
+import com.hopkins.rocknrollracing.state.race.RaceCar;
 import com.hopkins.rocknrollracing.state.race.Vector3D;
 import com.hopkins.rocknrollracing.state.race.World;
-import com.hopkins.rocknrollracing.state.track.TrackPiece;
-import com.hopkins.rocknrollracing.state.track.TrackPieceType;
+import com.hopkins.rocknrollracing.state.track.TiledTrack;
+import com.hopkins.rocknrollracing.state.track.TrackPieceTiler;
 import com.hopkins.rocknrollracing.views.elements.*;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -45,218 +45,126 @@ public class RaceView extends AppView {
     protected WeaponElement weapon;
     
     @Inject
-    protected TrackPieceElement track;
+    protected TrackTileRenderer track;
     
     @Inject
     protected PowerUpElement powerUp;
     
-    @Inject
-    protected RaceDebugElement debug;
     
     @Inject
     protected EffectsElement carEffects;
     
-    protected int lastAngle = 0;
+    protected Vector3D cameraPosition;
+    protected TiledTrack tiledTrack;
     
-    public RaceState RaceState;
+    public World theWorld;
 
     @Override
     protected void loadView() throws Exception {
-        // noop
+        
+        cameraPosition = new Vector3D();
+        
+        tiledTrack = null;
+        
+        track.load(Planet.ChemVI);
     }
+
+    
 
     @Override
     public void render(Graphics g, long ticks) {
-        CarRaceItem cri = RaceState.getCars().get(0);
-        Vector3D cameraPos = World.getCameraPosition(cri);
         
-        // Handle the first frame
-        if (prevCameraLead == null) {
-            prevCameraLead = new Vector3D(0f, 0f, 0f);
-        }
-        
-        Vector3D cameraLead = new Vector3D();
-        
-        // Figure out the desired camera lead
-        int angle = cri.getVelocity().getAngle();
-        float magnitude = cri.getVelocity().getMagnitude() / cri.getTopSpeed() * MAX_CAMERA_LEAD;
-        cameraLead.add(magnitude, angle);
-        
-        Vector3D delta = new Vector3D();
-        delta.copy(cameraLead);
-        delta.subtract(prevCameraLead);
-        
-        // limit the magnitude of the camera lead change
-        if (delta.getMagnitude() > MAX_CAMERA_LEAD_CHANGE) {
-            delta.setMagnitude(MAX_CAMERA_LEAD_CHANGE);
-        }
-        
-        // Calulate the Actual Camera Lead
-        cameraLead.copy(prevCameraLead);
-        if (delta.getMagnitude() < 0.001f) {
-            delta.set(0f,0f,0f);
-        }
-        cameraLead.add(delta);
-        
-        // Save the Actual Camera Lead for next time
-        prevCameraLead.copy(cameraLead);
-        
-        // Add the lead to the camera position
-        cameraPos.add(cameraLead);
-        
+        // Position the camera
+        positionCamera();
         
         // Render the track
-        renderTrack(g, cameraPos, ticks);
+        renderTrack(g);
         
-        // Draw the projectiles
-        renderProjectiles(g, cameraPos, ticks);
+        // Render the drops & powerups
+        renderDropsAndPowerUps(g);
         
-        // Draw the cars
-        renderCars(g, cameraPos, ticks);
+        // Render the cars and effects
+        renderCars(g, ticks);
         
+        // Render the weapons
+        renderWeapons(g);
         
-        // render the HUD on top of everything
-        hud.renderHud(g, RaceState, ticks);
-        
-        if (DEBUG_ENABLED) {
-            debug.render(g, RaceState.getCars().get(0));
-        }
+        // Render the HUD
+        hud.renderHud(g, theWorld, ticks);
     }
     
-    protected Vector3D getCameraPosition(CarRaceItem cri) {
-        // Calculate the desired camera position
-        Vector3D cameraPos = World.getCameraPosition(cri);
-        
-        float ratio = Math.min(1, cri.getVelocity().getMagnitude() / cri.getTopSpeed());
-        cameraPos.add(1.0f * ratio, cri.getAngle());
-        
-        // Save the camera position for next time
-        return cameraPos;
+    protected void positionCamera() {
+        // for now, we'll just position the camera on the user's car
+        cameraPosition.copyFrom(theWorld.RaceCars.get(0).Position);
     }
     
-    protected void renderTrack(Graphics g, Vector3D cameraPos, long ticks) {
-        Coord c = World.toMapPosition(cameraPos);
+    protected void renderTrack(Graphics g) {
+       if (tiledTrack == null) {
+           // initialize the tiled track
+           initializeTiledTrackForRendering();
+       }
+       
+       // calculate the map positions
+       int sx = 0;
+       int sy = 0;
+       int sw = 0;
+       int sh = 0;
+       
+       // render the background
+       track.renderSection(g, Screen.WIDTH, Screen.HEIGHT, tiledTrack.getBG(), sx, sy, sw, sh);
+       
+       // render the foreground
+       track.renderSection(g, Screen.WIDTH, Screen.HEIGHT, tiledTrack.getFG(), sx, sy, sw, sh);
+    }
+    
+    protected void initializeTiledTrackForRendering() {
+        tiledTrack = new TiledTrack(TiledTrack.TRACK_TILES_WIDE, TiledTrack.TRACK_TILES_HIGH);
         
-        // We need to clear the background;
-        g.setColor(BACKGROUND_COLOR);
-        g.fillRect(0, 0, Screen.WIDTH, Screen.HEIGHT);
-        
-        // We need to render potentially 9 track pieces
-        int y_min = Math.max(0, c.Y - 2);
-        int y_max = Math.min(7, c.Y + 2);
-        int x_min = Math.max(0, c.X - 2);
-        int x_max = Math.min(7, c.X + 2);
-        
-        // Render each track piece
-        for (c.Y = y_min; c.Y <= y_max; c.Y++) {
-            for (c.X = x_min; c.X <= x_max; c.X++) {
-                TrackPiece piece = RaceState.getTrack().getPiece(c.X, c.Y);
-                if (!piece.isEmpty()) {
-                    Vector3D piecePos = World.fromMapPosition(c);
-                    Coord sp = World.toScreenPosition(piecePos, cameraPos);
-                    track.renderPiece(g, sp.X, sp.Y, piece.getType());
-                    
-                    // debug rectangle
-                    if (DEBUG_ENABLED) {
-                        Coord p1 = World.toScreenPosition(piecePos, cameraPos);
-                        piecePos.X += 6;
-                        Coord p2 = World.toScreenPosition(piecePos, cameraPos);
-                        piecePos.Y += 6;
-                        Coord p3 = World.toScreenPosition(piecePos, cameraPos);
-                        piecePos.X -= 6;
-                        Coord p4 = World.toScreenPosition(piecePos, cameraPos);
-
-                        g.setColor(Color.CYAN);
-                        g.drawLine(p1.X, p1.Y, p2.X, p2.Y);
-                        g.drawLine(p2.X, p2.Y, p3.X, p3.Y);
-                        g.drawLine(p3.X, p3.Y, p4.X, p4.Y);
-                        g.drawLine(p4.X, p4.Y, p1.X, p1.Y);
-                    }
-                }
-                
-                
+        // create a map of the tiles we should render
+        TrackPieceTiler tpt = new TrackPieceTiler(theWorld.Track, tiledTrack);
+        tpt.renderTrack();
+    }
+    
+    protected void renderDropsAndPowerUps(Graphics g) {
+        for(Entity e : theWorld.Entities) {
+            int x = 0;
+            int y = 0;
+            if (e.Type.getClass() == PowerUp.class) {
+                powerUp.renderPowerUp(g, x, y, (PowerUp) e.Type);
+            } else if (e.Type.getClass() == Drop.class) {
+                weapon.renderDrop(g, x, y, (Drop) e.Type);
             }
         }
     }
     
-    protected void renderProjectiles(Graphics g, Vector3D cameraPos, long ticks) {
-        
-        // render the projectiles and items
-        for(RaceItem ri : RaceState.getItems()) {
-            
-            // Clip race items that aren't within the camer'as clip area
-            if (!World.isWithinCameraClip(ri.getPosition(), cameraPos)) {
-                //break;
-            }
-            
-            Coord c = World.toScreenPosition(ri.getPosition(), cameraPos);
-            switch (ri.getType()) {
-                case Projectile:
-                    weapon.renderProjectile(g, c.X, c.Y, World.toScreenAngle(ri.getAngle()), (Weapon) ri.getObject());
-                    if (ri.getObject().getClass() == Weapon.Missile.getClass()) {
-                        // add the smoke effect
-                    }
-                    break;
-                case Drop:
-                    weapon.renderDrop(g, c.X, c.Y, (Drop) ri.getObject());
-                    break;
-                case PowerUp:
-                    powerUp.renderPowerUp(g, c.X, c.Y, (PowerUp) ri.getObject());
-                    break;
-            }
-        }
-    }
-    
-    protected void renderCars(Graphics g, Vector3D cameraPos, long ticks) {
-        // render the cars
+    protected void renderCars(Graphics g, long ticks) {
         CarState cs = new CarState();
-        for(CarRaceItem cri : RaceState.getCars()) {
+        for(RaceCar rc : theWorld.RaceCars) {
             
-            // Clip cars that aren't within the camera's clip area
-            if (!World.isWithinCameraClip(cri.getPosition(), cameraPos)) {
-                //break;
-            }
-            
-            // Figure out the car's position and render the car
-            Coord c = World.toScreenPosition(cri.getPosition(), cameraPos);
-            cs.x = c.X;
-            cs.y = c.Y;
+            cs.x = 0;
+            cs.y = 0;
             cs.z = 0;
+            cs.color = rc.Color;
+            cs.frame = CarState.getFrameFromAngle(rc.Angle.getYaw());
+            cs.pitch = rc.Angle.getPitch();
+            cs.model = rc.Model;
+            cs.wheelPosition = 1;
             cs.trackZ = 0;
-            cs.color = cri.getColor();
-            cs.model = cri.getModel();
-            cs.frame = CarState.getFrameFromAngle(World.toScreenAngle(cri.getAngle()));
-            if (cri.isMoving()) {
-                cs.wheelPosition = (int) (ticks / 15 % 3);
-            } else {
-                cs.wheelPosition = 0;
-            }
+                    
             car.render(g, cs);
-            
-            if (cri.isNitro()) {
-                //carEffects.renderNitro(g, );
-            }
-            
-            if (cri.isSmoking()) {
-                Coord cSmokePos;
-                int frame;
-                Vector3D smokePos = new Vector3D();
-                smokePos.copy(cri.getPosition());
-                
-                // the first smoke position
-                frame = (int) (ticks / 15) % 2;
-                smokePos.Z += 0.25f;
-                smokePos.subtract(cri.getVelocity());
-                cSmokePos = World.toScreenPosition(smokePos, cameraPos);
-                carEffects.renderSmoke(g, cSmokePos.X, cSmokePos.Y, frame);
-                
-                // the second smoke position
-                smokePos.Z += 0.25f;
-                smokePos.subtract(cri.getVelocity());
-                cSmokePos = World.toScreenPosition(smokePos, cameraPos);
-                carEffects.renderSmoke(g, cSmokePos.X, cSmokePos.Y, frame);
+        }
+    }
+    
+    protected void renderWeapons(Graphics g) {
+        for(Entity e : theWorld.Entities) {
+            if (e.Type.getClass() == Weapon.class) {
+                int x = 0;
+                int y = 0;
+                weapon.renderProjectile(g, x, y, e.Angle.getYaw(), (Weapon) e.Type);
             }
         }
     }
+    
+   
 
 }

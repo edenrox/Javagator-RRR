@@ -22,7 +22,7 @@ public class CarElement extends AppElement {
     public static int WIDTH = 48;
     public static int HEIGHT = 48;
     public static final int[] ORIGIN_PALETTE = new int[] {
-            0x00000000, 0xff000000, 0xffFFB059, 0xff003973, 
+            0x00000000, 0xff323232, 0xff000000, 0xff003973, 
             0xff085242, 0xff215A10, 0xff600000, 0xff00FF00, 
             0xff001084, 0xff08008C, 0xff42007B, 0xff63005A, 
             0xff6B0010, 0xff005A21, 0xff4F3500, 0xff314E18};

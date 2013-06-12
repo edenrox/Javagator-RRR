@@ -8,9 +8,6 @@ package com.hopkins.rocknrollracing.state.race;
  *
  * @author ian
  */
-public enum RaceItemType {
-    Projectile,
-    Drop,
-    PowerUp,
-    Car
+public enum EntityState {
+    Spawning, Live, Dying, Dead
 }

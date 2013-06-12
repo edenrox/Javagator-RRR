@@ -21,7 +21,7 @@ public class SpriteInfo
     {
         
         Application app = new Application();
-        BufferedImage img = ImageUtils.loadSprite("images/cars/large/black.png");
+        BufferedImage img = ImageUtils.loadSprite("images/cars/battle_trak.png");
         //BufferedImage img = ImageIO.read(new File("C:\\Users\\ian\\Desktop\\1.png"));
         
         log.info(String.format("Image Size: %dx%d pixels",

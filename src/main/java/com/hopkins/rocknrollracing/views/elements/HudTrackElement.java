@@ -4,13 +4,11 @@
  */
 package com.hopkins.rocknrollracing.views.elements;
 
-import com.hopkins.rocknrollracing.state.race.CarRaceItem;
-import com.hopkins.rocknrollracing.state.race.Coord;
-import com.hopkins.rocknrollracing.state.race.RaceState;
+import com.hopkins.rocknrollracing.state.race.RaceCar;
+import com.hopkins.rocknrollracing.state.race.Vector2D;
 import com.hopkins.rocknrollracing.state.race.World;
 import com.hopkins.rocknrollracing.state.track.Track;
 import com.hopkins.rocknrollracing.state.track.TrackPieceType;
-import com.hopkins.rocknrollracing.utils.ImageUtils;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -44,14 +42,14 @@ public class HudTrackElement extends AppElement  {
         scale = 1.0f;
     }
     
-    public void renderCarPositions(Graphics g, int ox, int oy, RaceState rs) {
+    public void renderCarPositions(Graphics g, int ox, int oy, World theWorld) {
         // Render the car positions
-        for (int i = rs.getCars().size() - 1; i >= 0; i--) {
-            CarRaceItem cri = rs.getCars().get(i);
-            int ordinal = cri.getColor().ordinal();
-            Coord c = World.toMapPosition(cri.getPosition());
-            int px = ox + c.X * WIDTH;
-            int py = oy + c.Y * HEIGHT;
+        for (int i = theWorld.RaceCars.size() - 1; i >= 0; i--) {
+            RaceCar car = theWorld.RaceCars.get(i);
+            int ordinal = car.Color.ordinal();
+            Vector2D mp = theWorld.toMapPosition(car.Position);
+            int px = ox + mp.X * WIDTH;
+            int py = oy + mp.Y * HEIGHT;
             
             SpriteRenderer.render(g, colors, px, py, WIDTH, HEIGHT, ordinal, false, false, scale);
         }

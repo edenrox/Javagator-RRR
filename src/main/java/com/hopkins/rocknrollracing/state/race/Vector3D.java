@@ -4,88 +4,103 @@
  */
 package com.hopkins.rocknrollracing.state.race;
 
-import com.hopkins.rocknrollracing.utils.MathUtils;
+import com.hopkins.rocknrollracing.state.race.Angle3D;
 
 /**
  *
  * @author ian
  */
 public class Vector3D {
-    public static final float Epsilon = 0.01f;
+    public static final float EPSILON = 0.0001f;
+    
+    // Instance variables
     
     public float X;
     public float Y;
     public float Z;
     
+    // Constructors
+    
     public Vector3D() {
-        set(0f, 0f, 0f);
+        reset(0, 0, 0);
     }
     public Vector3D(float x, float y, float z) {
-        set(x, y, z);
+        reset(x, y, z);
     }
     
-    public float getMagnitude() {
+    // Copy/clone operators
+    
+    public void copyFrom(Vector3D toCopyFrom) {
+        X = toCopyFrom.X;
+        Y = toCopyFrom.Y;
+        Z = toCopyFrom.Z;
+    } 
+    
+    @Override
+    public Vector3D clone() {
+        return new Vector3D(X, Y, Z);
+    }
+    
+    
+    
+    // Accessors
+    
+    public float length() {
         return (float) Math.sqrt(X * X + Y * Y + Z * Z);
     }
     
-    public void scale(float scale) {
-        X = X * scale;
-        Y = Y * scale;
+    // Mutators
+    
+    public void unitFromAngles(Angle3D angles) {
+        X = (float) TrigLU.cos(angles.getYaw());
+        Y = (float) -TrigLU.sin(angles.getYaw());
+        Z = (float) TrigLU.sin(angles.getPitch());
     }
     
-    public void setMagnitude(float quantity) {
-        float magnitude = getMagnitude();
-        float factor = quantity / magnitude;
-        if (magnitude < Epsilon) {
-            factor = 0;
-        }
-        X = X * factor;
-        Y = Y * factor;
+    public final void reset(float x, float y, float z) {
+        X = x;
+        Y = y;
+        Z = z;
     }
-    
+
     public void add(Vector3D toAdd) {
         X += toAdd.X;
         Y += toAdd.Y;
         Z += toAdd.Z;
     }
     
-    public void subtract(Vector3D toSubtract) {
-        X -= toSubtract.X;
-        Y -= toSubtract.Y;
-        Z -= toSubtract.Z;
+    public void normalize() {
+        float length = this.length();
+        X = X / length;
+        Y = Y / length;
+        Z = Z / length;
     }
     
-    public void add(float quantity, int angle) {
-        float dx = (float) (quantity * MathUtils.cos(angle));
-        float dy = (float) (-quantity * MathUtils.sin(angle));
-        
-        X += dx;
-        Y += dy;
+    public void scale(float factor) {
+        X = X * factor;
+        Y = Y * factor;
+        Z = Z * factor;
     }
     
-    public void copy(Vector3D that) {
-        this.X = that.X;
-        this.Y = that.Y;
-        this.Z = that.Z;
+    public void subtract(Vector3D that) {
+        X = X - that.X;
+        Y = Y - that.Y;
+        Z = Z - that.Z;
     }
     
-    public final void set(float x, float y, float z) {
-        this.X = x;
-        this.Y = y;
-        this.Z = z;
-    }
-    
-    public int getAngle() {
-        int angle = (int) Math.round(Math.atan2(-this.Y, this.X) * 180 / Math.PI);
-        if (angle < 0) {
-            angle = 360 + angle;
-        }
-        return angle;
-    }
-
     @Override
     public String toString() {
-        return String.format("[%.2f, %.2f, %.2f]", X, Y, Z);
+        return String.format("[%.2f %.2f %.2f]", X, Y, Z);
     }
-
+    
+    @Override
+    public boolean equals(Object that) {
+        if ((that == null) || (that.getClass() != Vector3D.class)) {
+            return false;
+        }
+        Vector3D vThat = (Vector3D) that;
+        return (Math.abs(this.X - vThat.X) < EPSILON)
+                && (Math.abs(this.Y - vThat.Y) < EPSILON)
+                & (Math.abs(this.Z - vThat.Z) < EPSILON);
+    }
 }
